@@ -2,27 +2,45 @@ package myList;
 
 public class Test {
     public static void main(String[] args) {
-//        System.out.println("hello");
-        MyList<Integer> list = new MyArrayList<>();
 
-        int i =0;
-        System.out.println(list.getCapacity());
+        InterfaceMyArrayList<Integer> list = new MyArrayListImpl<>();
 
-        list.add(++i);
+        System.out.println("size = " + list.size());
+        System.out.println("capacity = " + list.getCapacity());
+
+
+        list.add(0);
         System.out.println(list);
-        list.add(++i);
-        list.add(++i);
-        list.add(++i);
-        list.add(++i);
-        list.add(++i);
-        System.out.println(list.getCapacity());
-
-        list.add(++i);
-        list.add(++i);
-        list.add(++i);
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        list.add(5);
+        list.add(6);
+        list.add(7);
+        list.add(2, 10);
         System.out.println(list);
-        System.out.println(list.size());
-        System.out.println(list.getCapacity());
+        System.out.println("size = " + list.size());
+        System.out.println("capacity = " + list.getCapacity());
+
+//        System.out.println(list.get(9)); // Indexofboundexeption
+        System.out.println(list.contains(0));
+
+        list.remove(1);
+        System.out.println(list);
+        System.out.println("size = " + list.size());
+        System.out.println("capacity = " + list.getCapacity());
+
+        list.clear();
+        System.out.println(list);
+        System.out.println("size = " + list.size());
+        System.out.println("capacity = " + list.getCapacity());
+
+
+        System.out.println((list.showArray()));
+
+
+
 
     }
 }
