@@ -18,10 +18,11 @@ public class MyArrayList<E> implements MyList<E> {
         array = new Object[capacity];
     }
 
+    // метод завершений
     @Override
     public boolean add(E e) {
-        if (currentSize < capacity) {
-            capacity *= 1.5;
+        if (currentSize >= capacity) {
+            capacity = (int) (capacity * 1.5);
             Object[] tempArray = new Object[capacity];
             System.arraycopy(array, 0, tempArray, 0, currentSize);
             array = tempArray;
@@ -47,10 +48,15 @@ public class MyArrayList<E> implements MyList<E> {
     }
 
     @Override
+    public int getCapacity(){
+        return capacity;
+    }
+    @Override
     public int size() {
         return currentSize;
     }
 
+    // метод завершений
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("[");
