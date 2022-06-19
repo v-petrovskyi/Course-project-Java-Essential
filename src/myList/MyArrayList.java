@@ -1,3 +1,5 @@
+package myList;
+
 import java.util.Arrays;
 
 public class MyArrayList <E> implements MyList<E>{
