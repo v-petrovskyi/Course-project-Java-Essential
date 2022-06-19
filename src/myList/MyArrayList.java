@@ -1,9 +1,8 @@
 package myList;
 
-import java.util.Arrays;
 
-public class MyArrayList <E> implements MyList<E>{
-    private int size;
+public class MyArrayList<E> implements MyList<E> {
+    private int currentSize;
     private int capacity;
     private final int DEFAULT_CAPACITY = 8;
 
@@ -21,8 +20,14 @@ public class MyArrayList <E> implements MyList<E>{
 
     @Override
     public boolean add(E e) {
-        array[size]=e;
-        size++;
+        if (currentSize < capacity) {
+            capacity *= 1.5;
+            Object[] tempArray = new Object[capacity];
+            System.arraycopy(array, 0, tempArray, 0, currentSize);
+            array = tempArray;
+        }
+        array[currentSize] = e;
+        currentSize++;
         return true;
     }
 
@@ -42,10 +47,20 @@ public class MyArrayList <E> implements MyList<E>{
     }
 
     @Override
+    public int size() {
+        return currentSize;
+    }
+
+    @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("MyArrayList{");
-        sb.append("array=").append(Arrays.toString(array));
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < currentSize; i++) {
+            sb.append(array[i]);
+            if (i < currentSize - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
         return sb.toString();
     }
 }

@@ -5,6 +5,7 @@ public interface MyList<E>  {
      boolean add(int index,E e);
      E get(int index);
      boolean contains(Object o);
+     int size();
 
 
 
