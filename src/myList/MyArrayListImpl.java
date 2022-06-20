@@ -106,7 +106,7 @@ public class MyArrayListImpl<E> implements InterfaceMyArrayList<E> {
         sb.append("]");
         return sb.toString();
     }
-
+// тесповий метод для виводу вмісту усього масиву
     @Override
     public String showArray(){
         return Arrays.toString(array);
