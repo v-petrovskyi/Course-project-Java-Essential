@@ -7,4 +7,11 @@ public class Driver {
     private String phoneNumber;
     private DriverQualificationEnum driverQualificationEnum;
 
+    public Driver(int id, String name, String surname, String phoneNumber, DriverQualificationEnum driverQualificationEnum) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.phoneNumber = phoneNumber;
+        this.driverQualificationEnum = driverQualificationEnum;
+    }
 }

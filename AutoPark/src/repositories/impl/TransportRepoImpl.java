@@ -28,16 +28,16 @@ public class TransportRepoImpl implements TransportRepo {
 
     @Override
     public Transport getTransportById(int id) {
-        Transport tempTr;
         for (Transport transport : transportList) {
-            int idCurrentTransport = transport.getId();
-            if (idCurrentTransport.)
+            if (transport.getId()==id){
+                return transport;
+            }
         }
         return null;
     }
 
     @Override
     public List<Transport> getAllTransport() {
-        return null;
+        return transportList;
     }
 }
