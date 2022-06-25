@@ -11,12 +11,10 @@ public class Transport {
     private Route route;
     private DriverQualificationEnum driverQualificationEnum;
 
-    public Transport(int id, String brand, int passengers, Driver driver, Route route, DriverQualificationEnum driverQualificationEnum) {
+    public Transport(int id, String brand, int passengers, DriverQualificationEnum driverQualificationEnum) {
         this.id = id;
         this.brand = brand;
         this.passengers = passengers;
-        this.driver = driver;
-        this.route = route;
         this.driverQualificationEnum = driverQualificationEnum;
     }
 

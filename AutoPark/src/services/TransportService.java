@@ -1,10 +1,16 @@
 package services;
 
-import com.sun.jdi.connect.Transport;
-import repositories.TransportRepo;
+
+import entities.Transport;
+import java.util.List;
 
 public interface TransportService {
     boolean add(Transport transport);
-    boolean remove(Transport transport);
+    boolean deleteTransport(int id);
+    Transport getTransportById(int id);
+    List<Transport> getAllTransport();
+    List<Transport> getListOfTransportByMark(String mark);
+    List<Transport> getListOfTransportWithoutDriver();
+    boolean removeTransportFromTheRoute(int id);
 
 }

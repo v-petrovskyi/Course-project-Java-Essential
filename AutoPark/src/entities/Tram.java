@@ -5,7 +5,9 @@ import entities.Transport;
 public class Tram extends Transport {
     private int qtyOfTramCars;
 
-    public Tram(int id, String brand, int passengers, Driver driver, Route route, DriverQualificationEnum driverQualificationEnum) {
-        super(id, brand, passengers, driver, route, driverQualificationEnum);
+    public Tram(int id, String brand, int passengers, DriverQualificationEnum driverQualificationEnum, int qtyOfTramCars) {
+        super(id, brand, passengers, driverQualificationEnum);
+        this.qtyOfTramCars = qtyOfTramCars;
     }
+
 }

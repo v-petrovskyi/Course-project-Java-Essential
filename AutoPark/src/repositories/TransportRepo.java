@@ -1,7 +1,6 @@
 package repositories;
 
 import entities.Transport;
-
 import java.util.List;
 
 public interface TransportRepo {
