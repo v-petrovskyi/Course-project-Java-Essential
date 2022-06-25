@@ -85,12 +85,25 @@ public class Transport {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Transport transport = (Transport) o;
-        return id == transport.id && passengers == transport.passengers && brand.equals(transport.brand) && driver.equals(transport.driver) && route.equals(transport.route) && driverQualificationEnum == transport.driverQualificationEnum;
+
+        if (id != transport.id) return false;
+        if (passengers != transport.passengers) return false;
+        if (!brand.equals(transport.brand)) return false;
+        if (!driver.equals(transport.driver)) return false;
+        if (!route.equals(transport.route)) return false;
+        return driverQualificationEnum == transport.driverQualificationEnum;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, brand, passengers, driver, route, driverQualificationEnum);
+        int result = id;
+        result = 31 * result + brand.hashCode();
+        result = 31 * result + passengers;
+        result = 31 * result + driver.hashCode();
+        result = 31 * result + route.hashCode();
+        result = 31 * result + driverQualificationEnum.hashCode();
+        return result;
     }
 }
