@@ -1,4 +1,4 @@
-package myList;
+package myArrayList;
 
 public interface InterfaceMyArrayList<E>  {
      boolean add(E e);
