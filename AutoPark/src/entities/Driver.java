@@ -1,3 +1,5 @@
+package entities;
+
 public class Driver {
     private int id;
     private String name;
