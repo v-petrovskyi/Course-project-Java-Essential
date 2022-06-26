@@ -19,6 +19,7 @@ public class Test {
         list.add(6);
         list.add(7);
         list.add(2, 10);
+        System.out.println(list.get(2));
         System.out.println(list);
         System.out.println("size = " + list.size());
         System.out.println("capacity = " + list.getCapacity());
