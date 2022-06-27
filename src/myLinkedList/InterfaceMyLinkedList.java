@@ -7,6 +7,7 @@ public interface InterfaceMyLinkedList<E> {
     boolean remove(int index);
     boolean removeFirst();
     boolean removeLast();
+    E get(int index);
     E getFirst();
     E getLast();
     int size();
