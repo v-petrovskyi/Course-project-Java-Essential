@@ -61,6 +61,7 @@ public class MyLinkedListImpl<E> implements InterfaceMyLinkedList<E> {
                 elemToRemove.next = null;
                 elemToRemove.previous = null;
                 elemToRemove.element=null;
+                size--;
                 return true;
             }
             findIndex++;
