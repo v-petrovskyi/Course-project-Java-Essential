@@ -3,9 +3,7 @@ package services.impls;
 import entities.Route;
 import entities.Transport;
 import repositories.RouteRepo;
-import repositories.impl.TransportRepoImpl;
 import services.RouteService;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +17,13 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public boolean deleteRoute(int id) {
+        List<Transport> transports = new TransportServiceImpl().getAllTransport();
+        for (Transport transport : transports) {
+            if (transport.getRoute().getId()==id){
+                System.out.println("Маршрут не видалено, на маршруті є транспорт");
+                return false;
+            }
+        }
         return routeRepo.deleteRoute(id);
     }
 
@@ -37,7 +42,7 @@ public class RouteServiceImpl implements RouteService {
         List<Route> allRoutes = getAllRoutes();
         List<Route> allRoutesWithTransport = new ArrayList<>();
         List<Route> allRoutesWithoutTransport = new ArrayList<>();
-        List<Transport> getAllTransport = new TransportRepoImpl().getAllTransport();
+        List<Transport> getAllTransport = new TransportServiceImpl().getAllTransport();
         for (Transport transport : getAllTransport) {
             if (!allRoutesWithTransport.contains(transport.getRoute())){
                 allRoutesWithTransport.add(transport.getRoute());

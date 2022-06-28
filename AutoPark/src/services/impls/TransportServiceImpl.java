@@ -1,8 +1,10 @@
 package services.impls;
 
+import entities.Route;
 import repositories.TransportRepo;
 import services.TransportService;
 import entities.Transport;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +19,11 @@ public class TransportServiceImpl implements TransportService {
 
     @Override
     public boolean deleteTransport(int id) {
-        transportRepo.deleteTransport(id);
-        return true;
+        if (getTransportById(id).getDriver() == null) {
+            transportRepo.deleteTransport(id);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -53,6 +58,17 @@ public class TransportServiceImpl implements TransportService {
             }
         }
         return listOfTransportWithoutDriver;
+    }
+
+    @Override
+    public boolean transportToRoute(int transportId, int routeId) {
+        Transport transport = getTransportById(transportId);
+        if (transport.getDriver() != null) {
+            Route route = new RouteServiceImpl().getRouteById(routeId);
+            transport.setRoute(route);
+            return true;
+        }
+        return false;
     }
 
     @Override

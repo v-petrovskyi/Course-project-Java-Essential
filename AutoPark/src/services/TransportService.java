@@ -11,6 +11,7 @@ public interface TransportService {
     List<Transport> getAllTransport();
     List<Transport> getListOfTransportByMark(String mark);
     List<Transport> getListOfTransportWithoutDriver();
+    boolean transportToRoute(int transportId, int routeId);
     boolean removeTransportFromTheRoute(int id);
 
 }
