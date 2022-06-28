@@ -11,6 +11,7 @@ public class DriverRepoImpl implements DriverRepo {
 
     public DriverRepoImpl() {
         this.driverList = new ArrayList<>();
+
     }
 
     @Override
@@ -27,7 +28,7 @@ public class DriverRepoImpl implements DriverRepo {
     @Override
     public Driver getDriverById(int id) {
         for (Driver driver : driverList) {
-            if (driver.getId()==id){
+            if (driver.getId() == id) {
                 return driver;
             }
         }

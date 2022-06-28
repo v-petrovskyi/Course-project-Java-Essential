@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TransportServiceImpl implements TransportService {
-    private TransportRepo transportRepo;
+    private final TransportRepo transportRepo;
 
     public TransportServiceImpl(TransportRepo transportRepo) {
         this.transportRepo = transportRepo;

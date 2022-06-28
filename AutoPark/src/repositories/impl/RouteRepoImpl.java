@@ -21,8 +21,11 @@ public class RouteRepoImpl implements RouteRepo {
 
     @Override
     public boolean deleteRoute(int id) {
-        routesList.remove(getRouteById(id));
-        return true;
+        if (routesList.remove(getRouteById(id))){
+            System.out.println("Маршрут з ID " + id + " успішно видалено");
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -12,19 +12,17 @@ import services.impls.DriverServiceImpl;
 import services.impls.RouteServiceImpl;
 import services.impls.TransportServiceImpl;
 
-public class Console {
-    public static void start(){
-        TransportRepo transportRepo = new TransportRepoImpl();
-        TransportService transportService = new TransportServiceImpl(transportRepo);
-        DriverRepo driverRepo = new DriverRepoImpl();
-        DriverService driverService = new DriverServiceImpl(driverRepo);
-        RouteRepo routeRepo = new RouteRepoImpl();
-        RouteService routeService = new RouteServiceImpl(routeRepo);
-    }
+import java.util.Scanner;
 
+public class Console {
+    TransportRepo transportRepo = new TransportRepoImpl();
+    TransportService transportService = new TransportServiceImpl(transportRepo);
+    DriverRepo driverRepo = new DriverRepoImpl();
+    DriverService driverService = new DriverServiceImpl(driverRepo);
+    RouteRepo routeRepo = new RouteRepoImpl();
+    RouteService routeService = new RouteServiceImpl(routeRepo);
 
     public void addDefaultData() {
-        TransportService transportService = new TransportServiceImpl(transportRepo);
         transportService.add(new Bus(1,"MAN",50, DriverQualificationEnum.BUS_DRIVER));
         transportService.add(new Bus(2,"Electron",48, DriverQualificationEnum.BUS_DRIVER));
         transportService.add(new Bus(3,"TATRA",25, DriverQualificationEnum.BUS_DRIVER));
@@ -45,7 +43,6 @@ public class Console {
         transportService.add(new Tram(18,"Inekon Trams",100,DriverQualificationEnum.TRAM_DRIVER,2));
         transportService.add(new Tram(19,"Inekon Trams",120,DriverQualificationEnum.TRAM_DRIVER,3));
         transportService.add(new Tram(20,"Inekon Trams",150,DriverQualificationEnum.TRAM_DRIVER,6));
-        System.out.println(transportService.getAllTransport());
 
         driverService.addDriver(new Driver(1, "Ivan", "Petrenko","6546546",DriverQualificationEnum.TRAM_DRIVER));
         driverService.addDriver(new Driver(2, "John", "Smith","46345",DriverQualificationEnum.TRAM_DRIVER));
@@ -57,13 +54,104 @@ public class Console {
         driverService.addDriver(new Driver(8, "Stew", "Roberts","54654",DriverQualificationEnum.BUS_DRIVER));
         driverService.addDriver(new Driver(9, "Vasyl", "Wilson","65641617",DriverQualificationEnum.BUS_DRIVER));
         driverService.addDriver(new Driver(10, "Olga", "Davies","65125489",DriverQualificationEnum.BUS_DRIVER));
-        System.out.println(driverService.getAllDrivers());
 
         routeService.addRoute(new Route(1, "Ivana Vyhovskoho St", "Naukova St"));
         routeService.addRoute(new Route(2, "Shchyretska St", "Volodymyra Velykoho St"));
         routeService.addRoute(new Route(3, "Knyahyni Ol'hy St", "VLyzhviarska St"));
         routeService.addRoute(new Route(4, "Petra Doroshenka St", "Zamkova St"));
         routeService.addRoute(new Route(5, "Zamkova St", "Poltv'yana St"));
+    }
+
+    public void show(){
+        System.out.println(transportService.getAllTransport());
+        System.out.println(driverService.getAllDrivers());
         System.out.println(routeService.getAllRoutes());
+    }
+
+    public void start() {
+        System.out.println("""
+                \tВиберіть один з пунктів меню
+                1 меню маршрутів
+                2 меню транспортів
+                3 меню водіїв
+                4 добавити тестові дані у базу даних
+                q вийти з програми""");
+        switch (scanner()){
+            case "1":
+                routesMenu();
+                break;
+            case "2":
+                transportsMenu();
+                break;
+            case "3":
+                driversMenu();
+                break;
+            case "4":
+                addDefaultData();
+                System.out.println("дані успішно додано");
+                start();
+                break;
+            case "q":
+                exit();
+            default:
+                start();
+        }
+    }
+
+    private String scanner() {
+        Scanner scanner = new Scanner(System.in);
+        return scanner.next();
+    }
+
+    private void exit() {
+        System.out.println("Exit...");
+        System.exit(0);
+    }
+
+    private void routesMenu() {
+        System.out.println("""
+                \tМеню маршрутів
+                1 добавити маршрут
+                2 видалити маршрут
+                3 вивести маршрут по Id
+                4 вивести усі маршрути
+                5 перейти у попереднє меню
+                q вийти з програми""");
+        switch (scanner()){
+            case "1":
+ //               routeService.addRoute(); // дописати функціонал!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                break;
+            case "2":
+                System.out.println("Ведіть ID маршрута який ви хочете виидалити");
+                int id = Integer.parseInt(scanner());
+                routeService.deleteRoute(id);
+                break;
+            case "3":
+                System.out.println("Ведіть ID маршрута який ви хочете вивестина екран");
+                int id2 = Integer.parseInt(scanner());
+                System.out.println(routeService.getRouteById(id2));
+                break;
+            case "4":
+                System.out.println(routeService.getAllRoutes());
+            case "5":
+                start();
+            case "q":
+                exit();
+            default:
+                routesMenu();
+        }
+
+
+        routesMenu();
+    }
+
+    private void transportsMenu() {
+        start();
+
+    }
+
+    private void driversMenu() {
+        start();
+
     }
 }

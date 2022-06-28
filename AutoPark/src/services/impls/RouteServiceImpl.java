@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RouteServiceImpl implements RouteService {
-    RouteRepo routeRepo;
+    private final RouteRepo routeRepo;
 
     public RouteServiceImpl(RouteRepo routeRepo) {
         this.routeRepo = routeRepo;

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DriverServiceImpl implements DriverService {
-    DriverRepo driverRepo;
+    private final DriverRepo driverRepo;
 
     public DriverServiceImpl(DriverRepo driverRepo) {
         this.driverRepo = driverRepo;
