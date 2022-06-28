@@ -2,6 +2,7 @@ package services.impls;
 
 import entities.Route;
 import repositories.TransportRepo;
+import repositories.impl.RouteRepoImpl;
 import services.TransportService;
 import entities.Transport;
 
@@ -10,6 +11,10 @@ import java.util.List;
 
 public class TransportServiceImpl implements TransportService {
     private TransportRepo transportRepo;
+
+    public TransportServiceImpl(TransportRepo transportRepo) {
+        this.transportRepo = transportRepo;
+    }
 
     @Override
     public boolean add(Transport transport) {
@@ -64,7 +69,7 @@ public class TransportServiceImpl implements TransportService {
     public boolean transportToRoute(int transportId, int routeId) {
         Transport transport = getTransportById(transportId);
         if (transport.getDriver() != null) {
-            Route route = new RouteServiceImpl().getRouteById(routeId);
+            Route route = new RouteRepoImpl().getRouteById(routeId);
             transport.setRoute(route);
             return true;
         }

@@ -1,17 +1,26 @@
 import entities.*;
+import repositories.DriverRepo;
+import repositories.RouteRepo;
 import repositories.TransportRepo;
+import repositories.impl.DriverRepoImpl;
+import repositories.impl.RouteRepoImpl;
 import repositories.impl.TransportRepoImpl;
+import services.DriverService;
+import services.RouteService;
+import services.TransportService;
+import services.impls.DriverServiceImpl;
+import services.impls.RouteServiceImpl;
+import services.impls.TransportServiceImpl;
 
 public class Main {
     public static void main(String[] args) {
-        TransportRepo transportRepo = new TransportRepoImpl();
-        Driver driver = new Driver(1, "Vasja", "Petrov", "4231354", DriverQualificationEnum.TRAM_DRIVER);
-        Route route =new Route(1, "Lviv", "Ternopil");
+        Console console = new Console();
+        console.start();
+        console.addDefaultData();
 
-        transportRepo.addTransport(new Transport(1,"MAN",22, DriverQualificationEnum.BUS_DRIVER));
-        transportRepo.addTransport(new Tram(2,"RENAULT",25, DriverQualificationEnum.TRAM_DRIVER, 5));
-//        System.out.println(transportRepo.deleteTransport(1));
-        System.out.println(transportRepo.getAllTransport());
+
+
+
 
 
 
