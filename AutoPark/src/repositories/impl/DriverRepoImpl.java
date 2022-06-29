@@ -16,8 +16,7 @@ public class DriverRepoImpl implements DriverRepo {
 
     @Override
     public boolean addDriver(Driver driver) {
-        driverList.add(driver);
-        return true;
+        return driverList.add(driver);
     }
 
     @Override
@@ -32,7 +31,8 @@ public class DriverRepoImpl implements DriverRepo {
                 return driver;
             }
         }
-        return null;
+        return null; // Тут краще спочатку перевірити, чи більше введений id ніж list.size(),
+                    // щоб не перебирати дарма. Також, повертати null не дуже, тоді краще його в Optional завернути додатково.
     }
 
     @Override

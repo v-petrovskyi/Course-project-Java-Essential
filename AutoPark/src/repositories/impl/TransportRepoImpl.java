@@ -15,14 +15,12 @@ public class TransportRepoImpl implements TransportRepo {
 
     @Override
     public boolean addTransport(Transport transport) {
-        transportList.add(transport);
-        return true;
+        return transportList.add(transport);
     }
 
     @Override
     public boolean deleteTransport(int id) {
-        transportList.remove(getTransportById(id));
-        return true;
+        return transportList.remove(getTransportById(id));
     }
 
     @Override
@@ -32,7 +30,8 @@ public class TransportRepoImpl implements TransportRepo {
                 return transport;
             }
         }
-        return null;
+        return null; // Тут краще спочатку перевірити, чи більше введений id ніж list.size(),
+        // щоб не перебирати дарма. Також, повертати null не дуже, тоді краще його в Optional завернути додатково.
     }
 
     @Override

@@ -93,8 +93,10 @@ public class Console {
                 break;
             case "q":
                 exit();
+                break;
             default:
                 start();
+                break;
         }
     }
 
@@ -122,35 +124,37 @@ public class Console {
  //               routeService.addRoute(); // дописати функціонал!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 break;
             case "2":
-                System.out.println("Ведіть ID маршрута який ви хочете виидалити");
+                System.out.println("Ведіть ID маршрута який ви хочете видалити");
                 int id = Integer.parseInt(scanner());
                 routeService.deleteRoute(id);
                 break;
             case "3":
-                System.out.println("Ведіть ID маршрута який ви хочете вивестина екран");
+                System.out.println("Ведіть ID маршрута який ви хочете вивести на екран");
                 int id2 = Integer.parseInt(scanner());
                 System.out.println(routeService.getRouteById(id2));
                 break;
             case "4":
+                System.out.println("\tУсі маршрути");
                 System.out.println(routeService.getAllRoutes());
             case "5":
                 start();
+                break;
             case "q":
                 exit();
+                break;
             default:
                 routesMenu();
+                break;
         }
-
-
         routesMenu();
     }
 
-    private void transportsMenu() {
+    private void transportsMenu() { // написати функціонал
         start();
 
     }
 
-    private void driversMenu() {
+    private void driversMenu() { // написати функціонал
         start();
 
     }

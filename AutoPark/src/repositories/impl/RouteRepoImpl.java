@@ -15,27 +15,23 @@ public class RouteRepoImpl implements RouteRepo {
 
     @Override
     public boolean addRoute(Route route) {
-        routesList.add(route);
-        return true;
+        return routesList.add(route);
     }
 
     @Override
     public boolean deleteRoute(int id) {
-        if (routesList.remove(getRouteById(id))){
-            System.out.println("Маршрут з ID " + id + " успішно видалено");
-            return true;
-        }
-        return false;
+        return routesList.remove(getRouteById(id));
     }
 
     @Override
     public Route getRouteById(int id) {
         for (Route route : routesList) {
-            if(route.getId()==id){
+            if (route.getId() == id) {
                 return route;
             }
         }
-        return null;
+        return null; // Тут краще спочатку перевірити, чи більше введений id ніж list.size(),
+        // щоб не перебирати дарма. Також, повертати null не дуже, тоді краще його в Optional завернути додатково.
     }
 
     @Override
