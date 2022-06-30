@@ -124,7 +124,7 @@ public class Console {
  //               routeService.addRoute(); // дописати функціонал!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 break;
             case "2":
-                System.out.println("Ведіть ID маршрута який ви хочете видалити");
+                System.out.println("Ведіть ID маршруту який ви хочете видалити");
                 int id = Integer.parseInt(scanner());
                 routeService.deleteRoute(id);
                 break;
@@ -147,7 +147,7 @@ public class Console {
     }
 
     private void printChosenRoute() {
-        System.out.println("Ведіть ID маршрута який ви хочете вивести на екран");
+        System.out.println("Ведіть ID маршруту який ви хочете вивести на екран");
         int id2 = Integer.parseInt(scanner());
         TableList tableListRoutes = new TableList(3,"ID", "Start Place","End Place");
         tableListRoutes.addRow(String.valueOf(routeService.getRouteById(id2).getId()),
