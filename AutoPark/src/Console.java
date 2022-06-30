@@ -129,13 +129,10 @@ public class Console {
                 routeService.deleteRoute(id);
                 break;
             case "3":
-                System.out.println("Ведіть ID маршрута який ви хочете вивести на екран");
-                int id2 = Integer.parseInt(scanner());
-                System.out.println(routeService.getRouteById(id2));
+                printChosenRoute();
                 break;
             case "4":
-                System.out.println("\tУсі маршрути");
-                System.out.println(routeService.getAllRoutes());
+                printAllRoutes();
             case "5":
                 start();
                 break;
@@ -147,6 +144,27 @@ public class Console {
                 break;
         }
         routesMenu();
+    }
+
+    private void printChosenRoute() {
+        System.out.println("Ведіть ID маршрута який ви хочете вивести на екран");
+        int id2 = Integer.parseInt(scanner());
+        TableList tableListRoutes = new TableList(3,"ID", "Start Place","End Place");
+        tableListRoutes.addRow(String.valueOf(routeService.getRouteById(id2).getId()),
+                               routeService.getRouteById(id2).getStartPlace(),
+                               routeService.getRouteById(id2).getEndPlace());
+        tableListRoutes.print();
+    }
+
+    private void printAllRoutes() {
+        System.out.println("\tУсі маршрути");
+        TableList tableListRoutes = new TableList(3,"ID", "Start Place","End Place");
+        for (Route allRoute : routeService.getAllRoutes()) {
+            tableListRoutes.addRow(String.valueOf(allRoute.getId()),
+                                   allRoute.getStartPlace(),
+                                   allRoute.getEndPlace());
+        }
+        tableListRoutes.print();
     }
 
     private void transportsMenu() { // написати функціонал
