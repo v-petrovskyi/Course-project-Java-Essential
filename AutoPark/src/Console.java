@@ -65,7 +65,7 @@ public class Console {
     public void show(){
         System.out.println(transportService.getAllTransport());
         System.out.println(driverService.getAllDrivers());
-        System.out.println(routeService.getAllRoutes());
+        printAllRoutes();
     }
 
     public void start() {
