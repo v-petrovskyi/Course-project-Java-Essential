@@ -2,6 +2,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.regex.Pattern;
 
+/**
+ * Скачано з GitHub
+ */
 public class TableList {
 
     private static final String[] BLINE = { "-", "\u2501" };

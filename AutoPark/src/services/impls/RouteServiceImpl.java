@@ -33,8 +33,10 @@ public class RouteServiceImpl implements RouteService {
         if (routeRepo.deleteRoute(id)) {
             System.out.println("Маршрут з ID " + id + " успішно видалено");
             return true;
+        } else {
+            System.out.println("Маршрут з ID " + id + " не знайдено");
+            return false;
         }
-        return false;
     }
 
     @Override
