@@ -142,22 +142,22 @@ public class Console {
                 6 перейти у попереднє меню
                 q вийти з програми""");
         switch (readFromConsole()) {
-            case "1":
+            case "1": // добавити маршрут
                 inputNewRoute();
                 break;
-            case "2":
+            case "2": //видалити маршрут
                 deletingRoute();
                 break;
-            case "3":
+            case "3": //вивести маршрут по Id
                 printChosenRoute();
                 break;
-            case "4":
+            case "4": //вивести усі маршрути
                 printRoutes("\tУсі маршрути", routeService.getAllRoutes());
                 break;
-            case "5":
+            case "5": //вивести маршрути без транспорту
                 printRoutes("\tМаршрути без транспорту", routeService.getAllRoutesWithoutTransport());
                 break;
-            case "6":
+            case "6": //перейти у попереднє меню
                 start();
                 break;
             case "q":
