@@ -106,31 +106,6 @@ public class Console {
         start();
     }
 
-    private String readFromConsole() {
-        BufferedReader bufferedReader = null;
-        String inputData;
-        try {
-            bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-            inputData = bufferedReader.readLine();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {   // якщо закривати  bufferedReader то вилітає Exception.
-//            if (bufferedReader != null) {
-//                try {
-//                    bufferedReader.close();
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-        }
-        return inputData;
-    }
-
-    private void exit() {
-        System.out.println("Exit...");
-        System.exit(0);
-    }
-
     private void routesMenu() {
         System.out.println("""
                 \tМеню маршрутів
@@ -168,6 +143,31 @@ public class Console {
                 break;
         }
         routesMenu();
+    }
+
+    private String readFromConsole() {
+        BufferedReader bufferedReader = null;
+        String inputData;
+        try {
+            bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+            inputData = bufferedReader.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {   // якщо закривати  bufferedReader то вилітає Exception.
+//            if (bufferedReader != null) {
+//                try {
+//                    bufferedReader.close();
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+        }
+        return inputData;
+    }
+
+    private void exit() {
+        System.out.println("Exit...");
+        System.exit(0);
     }
 
     private void printRoutes(String title, List<Route> routeService) {
