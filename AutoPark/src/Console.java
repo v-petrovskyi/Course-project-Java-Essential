@@ -11,10 +11,10 @@ import services.TransportService;
 import services.impls.DriverServiceImpl;
 import services.impls.RouteServiceImpl;
 import services.impls.TransportServiceImpl;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 
 public class Console {
@@ -57,6 +57,7 @@ public class Console {
         driverService.addDriver(new Driver(8, "Stew", "Roberts", "54654", DriverQualificationEnum.BUS_DRIVER));
         driverService.addDriver(new Driver(9, "Vasyl", "Wilson", "65641617", DriverQualificationEnum.BUS_DRIVER));
         driverService.addDriver(new Driver(10, "Olga", "Davies", "65125489", DriverQualificationEnum.BUS_DRIVER));
+        driverService.addDriver(new Driver(11, "Vasyl", "Davies", "5564123156", DriverQualificationEnum.BUS_DRIVER));
 
         routeService.addRoute(new Route(1, "Ivana Vyhovskoho St", "Naukova St"));
         routeService.addRoute(new Route(2, "Shchyretska St", "Volodymyra Velykoho St"));
@@ -70,7 +71,8 @@ public class Console {
     public void show() {
         System.out.println(transportService.getAllTransport());
         System.out.println(driverService.getAllDrivers());
-        printAllRoutes();
+        printRoutes("\tУсі маршрути", routeService.getAllRoutes());
+
     }
 
     public void start() {
@@ -136,7 +138,8 @@ public class Console {
                 2 видалити маршрут
                 3 вивести маршрут по Id
                 4 вивести усі маршрути
-                5 перейти у попереднє меню
+                5 вивести маршрути без транспорту
+                6 перейти у попереднє меню
                 q вийти з програми""");
         switch (readFromConsole()) {
             case "1":
@@ -149,8 +152,12 @@ public class Console {
                 printChosenRoute();
                 break;
             case "4":
-                printAllRoutes();
+                printRoutes("\tУсі маршрути", routeService.getAllRoutes());
+                break;
             case "5":
+                printRoutes("\tМаршрути без транспорту", routeService.getAllRoutesWithoutTransport());
+                break;
+            case "6":
                 start();
                 break;
             case "q":
@@ -163,6 +170,18 @@ public class Console {
         routesMenu();
     }
 
+    private void printRoutes(String title, List<Route> routeService) {
+        System.out.println(title);
+        TableList tableListRoutes = new TableList(3, "ID", "Start Place", "End Place");
+        for (Route allRoute : routeService) {
+            tableListRoutes.addRow(String.valueOf(allRoute.getId()),
+                    allRoute.getStartPlace(),
+                    allRoute.getEndPlace());
+        }
+        tableListRoutes.print();
+        routesMenu();
+    }
+
     private void deletingRoute() {
         System.out.println("Ведіть ID маршруту який ви хочете видалити");
         int id = Integer.parseInt(readFromConsole());
@@ -171,7 +190,7 @@ public class Console {
 
     private void inputNewRoute() {
         System.out.println("""
-                Введіть наступні дані, використовуйте "|" в якості розділювача
+                Введіть дані маршруту, використовуйте "|" в якості розділювача
                                         
                 ID | Start Place         | End Place             """);
         String dataFromConsole = readFromConsole();
@@ -208,7 +227,6 @@ public class Console {
             default:
                 routesMenu();
                 break;
-
         }
     }
 
@@ -219,18 +237,6 @@ public class Console {
         tableListRoutes.addRow(String.valueOf(routeService.getRouteById(id).getId()),
                 routeService.getRouteById(id).getStartPlace(),
                 routeService.getRouteById(id).getEndPlace());
-        tableListRoutes.print();
-        routesMenu();
-    }
-
-    private void printAllRoutes() {
-        System.out.println("\tУсі маршрути");
-        TableList tableListRoutes = new TableList(3, "ID", "Start Place", "End Place");
-        for (Route allRoute : routeService.getAllRoutes()) {
-            tableListRoutes.addRow(String.valueOf(allRoute.getId()),
-                    allRoute.getStartPlace(),
-                    allRoute.getEndPlace());
-        }
         tableListRoutes.print();
         routesMenu();
     }

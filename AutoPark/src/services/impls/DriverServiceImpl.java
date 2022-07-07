@@ -45,6 +45,18 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
+    public List<Driver> getAllDriversBySurname(String surname) {
+        List<Driver> allDriversBySurname = new ArrayList<>();
+        List<Driver> allDrivers = getAllDrivers();
+        for (Driver driver : allDrivers) {
+            if (driver.getSurname().equals(surname)){
+                allDriversBySurname.add(driver);
+            }
+        }
+        return allDriversBySurname;
+    }
+
+    @Override
     public List<Driver> getAllDrivers() {
         return driverRepo.getAllDrivers();
     }
@@ -59,6 +71,25 @@ public class DriverServiceImpl implements DriverService {
             }
         }
         return allDriversOnTheRoute;
+    }
+
+    @Override
+    public List<Driver> getAllDriversWithoutTransport() {
+        List<Driver> allDriversWithoutTransport = new ArrayList<>();
+        List<Driver> allDriversWithTransport = new ArrayList<>();
+        List<Transport> allTransport = new TransportRepoImpl().getAllTransport();
+        for (Transport transport : allTransport) {
+            if (transport.getDriver() != null){
+                allDriversWithTransport.add(transport.getDriver());
+            }
+        }
+        List<Driver> allDrivers = getAllDrivers();
+        for (Driver driver : allDrivers) {
+            if(!allDriversWithTransport.contains(driver)){
+                allDriversWithoutTransport.add(driver);
+            }
+        }
+        return allDriversWithoutTransport;
     }
 
     @Override
