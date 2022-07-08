@@ -308,9 +308,9 @@ public class Console {
         String phoneNumber = slitByBlock[3].trim();
         String driverQualification = slitByBlock[4].trim();
         DriverQualificationEnum driverQualificationEnum = null;
-        if (driverQualification.equals(DriverQualificationEnum.TRAM_DRIVER.getType())){
+        if (driverQualification.equalsIgnoreCase(DriverQualificationEnum.TRAM_DRIVER.getType())){
             driverQualificationEnum = DriverQualificationEnum.TRAM_DRIVER;
-        } else if (driverQualification.equals(DriverQualificationEnum.BUS_DRIVER.getType())){
+        } else if (driverQualification.equalsIgnoreCase(DriverQualificationEnum.BUS_DRIVER.getType())){
             driverQualificationEnum = DriverQualificationEnum.BUS_DRIVER;
         }
         Driver newDriver = new Driver(id,name,surname,phoneNumber, driverQualificationEnum);
