@@ -74,7 +74,7 @@ public class Transport {
         sb.append(", passengers=").append(passengers);
         sb.append(", driver=").append(driver);
         sb.append(", route=").append(route);
-        sb.append(", driverQualificationEnum=").append(driverQualificationEnum);
+        sb.append(", driverQualificationEnum=").append(driverQualificationEnum.name());
         sb.append('}');
         return sb.toString();
     }

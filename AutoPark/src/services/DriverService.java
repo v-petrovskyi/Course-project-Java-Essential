@@ -1,7 +1,6 @@
 package services;
 
 import entities.Driver;
-import entities.Route;
 
 import java.util.List;
 
@@ -13,6 +12,6 @@ public interface DriverService {
     List<Driver> getAllDrivers();
     List<Driver> getAllDriversOnTheRoute(int routeId);
     List<Driver> getAllDriversWithoutTransport();
-    boolean AssignDriverToTransport (int driverId, int transportId);
+    boolean assignDriverToTransport(int driverId, int transportId);
 
 }

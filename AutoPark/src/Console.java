@@ -11,6 +11,7 @@ import services.TransportService;
 import services.impls.DriverServiceImpl;
 import services.impls.RouteServiceImpl;
 import services.impls.TransportServiceImpl;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -198,13 +199,14 @@ public class Console {
         String startPlace = slitByBlock[1].trim();
         String endPlace = slitByBlock[2].trim();
         Route newRoute = new Route(id, startPlace, endPlace);
-        if (routeService.addRoute(newRoute)){
+        if (routeService.addRoute(newRoute)) {
             System.out.println("внесено новий маршрут");
             TableList tableListRoutes = new TableList(3, "ID", "Start Place", "End Place");
             tableListRoutes.addRow(String.valueOf(routeService.getRouteById(id).getId()),
                     routeService.getRouteById(id).getStartPlace(),
                     routeService.getRouteById(id).getEndPlace());
             tableListRoutes.print();
+            System.out.println();
         }
 
         System.out.println("""
@@ -212,7 +214,7 @@ public class Console {
                 2 повернутися у меню маршрутів
                 3 у головне меню
                 q вийти""");
-        switch (readFromConsole()){
+        switch (readFromConsole()) {
             case "1":
                 inputNewRoute();
                 break;
@@ -254,20 +256,146 @@ public class Console {
                 2 видалити водія
                 3 вивести на екран водія по ID
                 4 вивести водіїв із вказаним прізвищем
-                5 вивести на  екран усіх водіїв
+                5 вивести на екран усіх водіїв
                 6 вивести усіх водіїв на вказаному маршруті
                 7 вивести усіх водіїв без транспорту
                 8 назначити водія на транспорт
                 9 перейти у попереднє меню
                 q вийти з програми""");
-        switch (readFromConsole()){
+        switch (readFromConsole()) {
             case "1": //додати водія
-//                inputNewDriver();
+                inputNewDriver();
                 break;
             case "2": //видалити водія
                 deletingDriver();
+                break;
+            case "3": //вивести на екран водія по ID
+                printChosenDriver();
+                break;
+            case "4": //вивести водіїв із вказаним прізвищем
+                printDriversWithChosenSurname();
+                break;
+            case "5": //вивести на екран усіх водіїв
+                printDrivers("\tУсі водії", driverService.getAllDrivers());
+                break;
+            case "6": //вивести усіх водіїв на вказаному маршруті
+                printDriversOnChosenRoute();
+                break;
+            case "7": //вивести усіх водіїв без транспорту
+                printDrivers("\tУсі водії без транспорту", driverService.getAllDriversWithoutTransport());
+                break;
+            case "8": //назначити водія на транспорт
+                driverToTransport();
+                break;
+            case "9": //перейти у попереднє меню
+                start();
+                break;
+            case "q":
+                exit();
+                break;
         }
+        driversMenu();
+    }
 
+    private void inputNewDriver() {
+        System.out.println("""
+                Введіть дані маршруту, використовуйте "|" в якості розділювача
+                                        
+                 ID | Name  | Surname | Phone number | Driver license (Автобус або Трамвай)""");
+        String[] slitByBlock = readFromConsole().split("\\|");
+        int id = Integer.parseInt(slitByBlock[0].trim());
+        String name = slitByBlock[1].trim();
+        String surname = slitByBlock[2].trim();
+        String phoneNumber = slitByBlock[3].trim();
+        DriverQualificationEnum driverQualificationEnum = ;
+
+        Driver newDriver = new Driver(id,name,surname,phoneNumber);
+        if (driverService.addDriver(newDriver)) {
+            System.out.println("внесено нового водія");
+            TableList tableListDrivers = new TableList("ID", "Name", "Surname", "Phone number", "Driver license");
+            tableListDrivers.addRow(
+                    String.valueOf(driverService.getDriverById(id).getId()),
+                    driverService.getDriverById(id).getName(),
+                    driverService.getDriverById(id).getSurname(),
+                    driverService.getDriverById(id).getPhoneNumber(),
+                    driverService.getDriverById(id).getDriverQualificationEnum().getType());
+            tableListDrivers.print();
+            System.out.println();
+
+        }
+        System.out.println("""
+                1 внести ще одного водія
+                2 повернутися у меню водіїв
+                3 у головне меню
+                q вийти""");
+        switch (readFromConsole()) {
+            case "1":
+                inputNewDriver();
+                break;
+            case "2":
+                driversMenu();
+                break;
+            case "3":
+                start();
+                break;
+            case "q":
+                exit();
+                break;
+            default:
+                driversMenu();
+                break;
+        }
+    }
+
+    private void printDriversOnChosenRoute() {
+        System.out.println("Введіть ID маршруту");
+        int route = Integer.parseInt(readFromConsole().trim());
+        printDrivers("\tУсі водії на маршруті з ID " + route, driverService.getAllDriversOnTheRoute(route));
+    }
+
+    private void printDriversWithChosenSurname() {
+        System.out.println("Введіть прізвище");
+        String surname = readFromConsole().trim();
+        printDrivers("\tУсі водії з прізвищем " + surname, driverService.getAllDriversBySurname(surname));
+    }
+
+    private void driverToTransport() {
+        System.out.println("Введіть ID водія і ID транспорту, використовуйте \"|\" в якості розділювача");
+        System.out.println("Driver ID | Transport ID");
+        String[] slitByBlock = readFromConsole().split("\\|");
+        int driverId = Integer.parseInt(slitByBlock[0].trim());
+        int transportId=Integer.parseInt(slitByBlock[1].trim());
+        driverService.assignDriverToTransport(driverId, transportId);
+    }
+
+    private void printDrivers(String title, List<Driver> driverList) {
+        System.out.println(title);
+        TableList tableListDrivers = new TableList("ID", "Name", "Surname", "Phone number", "Driver license");
+        for (Driver driver : driverList) {
+            tableListDrivers.addRow(
+                    String.valueOf(driver.getId()),
+                    driver.getName(),
+                    driver.getSurname(),
+                    driver.getPhoneNumber(),
+                    String.valueOf(driver.getDriverQualificationEnum().getType()));
+        }
+        tableListDrivers.print();
+        driversMenu();
+    }
+
+    private void printChosenDriver() {
+        System.out.println("Ведіть ID водія якого ви хочете вивести на екран");
+        int id = Integer.parseInt(readFromConsole());
+        TableList tableListDrivers = new TableList("ID", "Name", "Surname", "Phone number", "Driver license");
+        tableListDrivers.addRow(
+                String.valueOf(driverService.getDriverById(id).getId()),
+                driverService.getDriverById(id).getName(),
+                driverService.getDriverById(id).getSurname(),
+                driverService.getDriverById(id).getPhoneNumber(),
+                driverService.getDriverById(id).getDriverQualificationEnum().getType());
+        tableListDrivers.print();
+        System.out.println();
+        driversMenu();
     }
 
     private void deletingDriver() {

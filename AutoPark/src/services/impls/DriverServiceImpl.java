@@ -105,7 +105,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public boolean AssignDriverToTransport(int driverId, int transportId) {
+    public boolean assignDriverToTransport(int driverId, int transportId) {
         Transport currentTransport = new TransportRepoImpl().getTransportById(transportId);
         Driver driver = getDriverById(driverId);
         if (driver.getDriverQualificationEnum().equals(currentTransport.getDriverQualificationEnum())) {
