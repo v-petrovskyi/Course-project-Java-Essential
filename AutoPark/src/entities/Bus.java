@@ -6,8 +6,10 @@ public class Bus extends Transport {
     private String type;
     private int qtyOfDoors;
 
-    public Bus(int id, String brand, int passengers, DriverQualificationEnum driverQualificationEnum) {
+    public Bus(int id, String brand, int passengers, DriverQualificationEnum driverQualificationEnum, String type, int qtyOfDoors) {
         super(id, brand, passengers, driverQualificationEnum);
+        this.type = type;
+        this.qtyOfDoors = qtyOfDoors;
     }
 
     @Override

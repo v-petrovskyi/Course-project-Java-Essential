@@ -11,7 +11,7 @@ public class Transport {
     private Route route;
     private DriverQualificationEnum driverQualificationEnum;
 
-    public Transport(int id, String brand, int passengers, DriverQualificationEnum driverQualificationEnum) {
+    protected Transport(int id, String brand, int passengers, DriverQualificationEnum driverQualificationEnum) {
         this.id = id;
         this.brand = brand;
         this.passengers = passengers;

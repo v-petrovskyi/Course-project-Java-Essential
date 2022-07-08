@@ -18,7 +18,7 @@ public class TransportServiceImpl implements TransportService {
     }
 
     @Override
-    public boolean add(Transport transport) {
+    public boolean addTransport(Transport transport) {
         for (Transport transport1 : getAllTransport()) {
             if (transport.getId() == transport1.getId()) {
                 try {
@@ -35,9 +35,10 @@ public class TransportServiceImpl implements TransportService {
     @Override
     public boolean deleteTransport(int id) {
         if (getTransportById(id).getDriver() == null) {
-            transportRepo.deleteTransport(id);
-            return true;
+            System.out.println("Транспорт "+ id + "успішно видалено");
+            return transportRepo.deleteTransport(id);
         }
+        System.out.println("Транспорт не видалено. На даному транспорі є водій, \nперед видаленням зніміть водія з транспорту");
         return false;
     }
 
