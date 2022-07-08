@@ -46,7 +46,7 @@ public class DriverServiceImpl implements DriverService {
                 }
             }
         }
-        // додати перевірку чи існує водій з даним ID
+        // TODO додати перевірку чи існує водій з даним ID
         return driverRepo.deleteDriver(id);
     }
 

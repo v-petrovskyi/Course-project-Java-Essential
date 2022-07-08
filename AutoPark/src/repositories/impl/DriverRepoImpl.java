@@ -31,7 +31,7 @@ public class DriverRepoImpl implements DriverRepo {
                 return driver;
             }
         }
-        return null; // Тут краще спочатку перевірити, чи більше введений id ніж list.size(),
+        return null; // TODO Тут краще спочатку перевірити, чи більше введений id ніж list.size(),
                     // щоб не перебирати дарма. Також, повертати null не дуже, тоді краще його в Optional завернути додатково.
     }
 
