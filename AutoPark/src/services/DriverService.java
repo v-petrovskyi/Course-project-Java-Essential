@@ -11,7 +11,7 @@ public interface DriverService {
     Driver getDriverById(int id);
     List<Driver> getAllDriversBySurname(String surname);
     List<Driver> getAllDrivers();
-    List<Driver> getAllDriversOnTheRoute(Route route);
+    List<Driver> getAllDriversOnTheRoute(int routeId);
     List<Driver> getAllDriversWithoutTransport();
     boolean AssignDriverToTransport (int driverId, int transportId);
 

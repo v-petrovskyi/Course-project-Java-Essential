@@ -193,25 +193,26 @@ public class Console {
                 Введіть дані маршруту, використовуйте "|" в якості розділювача
                                         
                 ID | Start Place         | End Place             """);
-        String dataFromConsole = readFromConsole();
-        String[] slitByBlock = dataFromConsole.split("\\|");
+        String[] slitByBlock = readFromConsole().split("\\|");
         int id = Integer.parseInt(slitByBlock[0].trim());
         String startPlace = slitByBlock[1].trim();
         String endPlace = slitByBlock[2].trim();
         Route newRoute = new Route(id, startPlace, endPlace);
-        routeService.addRoute(newRoute);
-        System.out.println("внесено новий маршрут");
-        TableList tableListRoutes = new TableList(3, "ID", "Start Place", "End Place");
-        tableListRoutes.addRow(String.valueOf(routeService.getRouteById(id).getId()),
-                routeService.getRouteById(id).getStartPlace(),
-                routeService.getRouteById(id).getEndPlace());
-        tableListRoutes.print();
+        if (routeService.addRoute(newRoute)){
+            System.out.println("внесено новий маршрут");
+            TableList tableListRoutes = new TableList(3, "ID", "Start Place", "End Place");
+            tableListRoutes.addRow(String.valueOf(routeService.getRouteById(id).getId()),
+                    routeService.getRouteById(id).getStartPlace(),
+                    routeService.getRouteById(id).getEndPlace());
+            tableListRoutes.print();
+        }
+
         System.out.println("""
                 1 внести ще один маршрут
                 2 повернутися у меню маршрутів
                 3 у головне меню
                 q вийти""");
-        switch (dataFromConsole){
+        switch (readFromConsole()){
             case "1":
                 inputNewRoute();
                 break;
@@ -246,8 +247,32 @@ public class Console {
 
     }
 
-    private void driversMenu() { // написати функціонал
-        start();
+    private void driversMenu() {
+        System.out.println("""
+                \tМеню водіїв
+                1 додати водія
+                2 видалити водія
+                3 вивести на екран водія по ID
+                4 вивести водіїв із вказаним прізвищем
+                5 вивести на  екран усіх водіїв
+                6 вивести усіх водіїв на вказаному маршруті
+                7 вивести усіх водіїв без транспорту
+                8 назначити водія на транспорт
+                9 перейти у попереднє меню
+                q вийти з програми""");
+        switch (readFromConsole()){
+            case "1": //додати водія
+//                inputNewDriver();
+                break;
+            case "2": //видалити водія
+                deletingDriver();
+        }
 
+    }
+
+    private void deletingDriver() {
+        System.out.println("Ведіть ID водія якого ви хочете видалити");
+        int id = Integer.parseInt(readFromConsole());
+        driverService.deleteDriver(id);
     }
 }

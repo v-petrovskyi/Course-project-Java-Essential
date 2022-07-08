@@ -1,5 +1,6 @@
 package services.impls;
 
+import entities.Driver;
 import entities.Route;
 import repositories.TransportRepo;
 import repositories.impl.RouteRepoImpl;
@@ -18,8 +19,17 @@ public class TransportServiceImpl implements TransportService {
 
     @Override
     public boolean add(Transport transport) {
-        transportRepo.addTransport(transport);
-        return true;
+        for (Transport transport1 : getAllTransport()) {
+            if (transport.getId() == transport1.getId()) {
+                try {
+                    throw new Exception("транспорт з ID " + transport.getId() + " є у базі");
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    return false;
+                }
+            }
+        }
+        return transportRepo.addTransport(transport);
     }
 
     @Override

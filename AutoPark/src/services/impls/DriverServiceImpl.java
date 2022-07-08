@@ -5,6 +5,7 @@ import entities.Route;
 import entities.Transport;
 import repositories.DriverRepo;
 import repositories.TransportRepo;
+import repositories.impl.RouteRepoImpl;
 import repositories.impl.TransportRepoImpl;
 import services.DriverService;
 
@@ -20,6 +21,16 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public boolean addDriver(Driver driver) {
+        for (Driver driver1 : getAllDrivers()) {
+            if (driver.getId() == driver1.getId()) {
+                try {
+                    throw new Exception("водій з ID " + driver.getId() + " є у базі");
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    return false;
+                }
+            }
+        }
         return driverRepo.addDriver(driver);
     }
 
@@ -35,8 +46,8 @@ public class DriverServiceImpl implements DriverService {
                 }
             }
         }
-        driverRepo.deleteDriver(id);
-        return true;
+        // додати перевірку чи існує водій з даним ID
+        return driverRepo.deleteDriver(id);
     }
 
     @Override
@@ -62,7 +73,8 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public List<Driver> getAllDriversOnTheRoute(Route route) {
+    public List<Driver> getAllDriversOnTheRoute(int routeId) {
+        Route route = new RouteRepoImpl().getRouteById(routeId);
         List<Driver> allDriversOnTheRoute = new ArrayList<>();
         List<Transport> allTransport = new TransportRepoImpl().getAllTransport();
         for (Transport transport : allTransport) {

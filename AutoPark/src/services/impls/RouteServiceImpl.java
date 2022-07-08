@@ -18,6 +18,16 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public boolean addRoute(Route route) {
+        for (Route route1 : getAllRoutes()) {
+            if (route.getId() == route1.getId()) {
+                try {
+                    throw new Exception("маршрут з ID " + route.getId() + " є у базі");
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    return false;
+                }
+            }
+        }
         return routeRepo.addRoute(route);
     }
 
