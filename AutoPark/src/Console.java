@@ -11,7 +11,6 @@ import services.TransportService;
 import services.impls.DriverServiceImpl;
 import services.impls.RouteServiceImpl;
 import services.impls.TransportServiceImpl;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -126,6 +125,7 @@ public class Console {
                 break;
             case "3": //вивести маршрут по Id
                 printChosenRoute();
+                routesMenu();
                 break;
             case "4": //вивести усі маршрути
                 printRoutes("\tУсі маршрути", routeService.getAllRoutes());
@@ -201,12 +201,7 @@ public class Console {
         Route newRoute = new Route(id, startPlace, endPlace);
         if (routeService.addRoute(newRoute)) {
             System.out.println("внесено новий маршрут");
-            TableList tableListRoutes = new TableList(3, "ID", "Start Place", "End Place");
-            tableListRoutes.addRow(String.valueOf(routeService.getRouteById(id).getId()),
-                    routeService.getRouteById(id).getStartPlace(),
-                    routeService.getRouteById(id).getEndPlace());
-            tableListRoutes.print();
-            System.out.println();
+            printOneRoute(id);
         }
 
         System.out.println("""
@@ -233,15 +228,19 @@ public class Console {
         }
     }
 
-    private void printChosenRoute() {
-        System.out.println("Ведіть ID маршруту який ви хочете вивести на екран");
-        int id = Integer.parseInt(readFromConsole());
+    private void printOneRoute(int id) {
         TableList tableListRoutes = new TableList(3, "ID", "Start Place", "End Place");
         tableListRoutes.addRow(String.valueOf(routeService.getRouteById(id).getId()),
                 routeService.getRouteById(id).getStartPlace(),
                 routeService.getRouteById(id).getEndPlace());
         tableListRoutes.print();
-        routesMenu();
+        System.out.println();
+    }
+
+    private void printChosenRoute() {
+        System.out.println("Ведіть ID маршруту який ви хочете вивести на екран");
+        int id = Integer.parseInt(readFromConsole());
+        printOneRoute(id);
     }
 
     private void transportsMenu() { // написати функціонал
@@ -307,21 +306,17 @@ public class Console {
         String name = slitByBlock[1].trim();
         String surname = slitByBlock[2].trim();
         String phoneNumber = slitByBlock[3].trim();
-        DriverQualificationEnum driverQualificationEnum = ;
-
-        Driver newDriver = new Driver(id,name,surname,phoneNumber);
+        String driverQualification = slitByBlock[4].trim();
+        DriverQualificationEnum driverQualificationEnum = null;
+        if (driverQualification.equals(DriverQualificationEnum.TRAM_DRIVER.getType())){
+            driverQualificationEnum = DriverQualificationEnum.TRAM_DRIVER;
+        } else if (driverQualification.equals(DriverQualificationEnum.BUS_DRIVER.getType())){
+            driverQualificationEnum = DriverQualificationEnum.BUS_DRIVER;
+        }
+        Driver newDriver = new Driver(id,name,surname,phoneNumber, driverQualificationEnum);
         if (driverService.addDriver(newDriver)) {
             System.out.println("внесено нового водія");
-            TableList tableListDrivers = new TableList("ID", "Name", "Surname", "Phone number", "Driver license");
-            tableListDrivers.addRow(
-                    String.valueOf(driverService.getDriverById(id).getId()),
-                    driverService.getDriverById(id).getName(),
-                    driverService.getDriverById(id).getSurname(),
-                    driverService.getDriverById(id).getPhoneNumber(),
-                    driverService.getDriverById(id).getDriverQualificationEnum().getType());
-            tableListDrivers.print();
-            System.out.println();
-
+            printOneDriver(id);
         }
         System.out.println("""
                 1 внести ще одного водія
@@ -345,6 +340,18 @@ public class Console {
                 driversMenu();
                 break;
         }
+    }
+
+    private void printOneDriver(int id) {
+        TableList tableListDrivers = new TableList("ID", "Name", "Surname", "Phone number", "Driver license");
+        tableListDrivers.addRow(
+                String.valueOf(driverService.getDriverById(id).getId()),
+                driverService.getDriverById(id).getName(),
+                driverService.getDriverById(id).getSurname(),
+                driverService.getDriverById(id).getPhoneNumber(),
+                driverService.getDriverById(id).getDriverQualificationEnum().getType());
+        tableListDrivers.print();
+        System.out.println();
     }
 
     private void printDriversOnChosenRoute() {
@@ -386,15 +393,7 @@ public class Console {
     private void printChosenDriver() {
         System.out.println("Ведіть ID водія якого ви хочете вивести на екран");
         int id = Integer.parseInt(readFromConsole());
-        TableList tableListDrivers = new TableList("ID", "Name", "Surname", "Phone number", "Driver license");
-        tableListDrivers.addRow(
-                String.valueOf(driverService.getDriverById(id).getId()),
-                driverService.getDriverById(id).getName(),
-                driverService.getDriverById(id).getSurname(),
-                driverService.getDriverById(id).getPhoneNumber(),
-                driverService.getDriverById(id).getDriverQualificationEnum().getType());
-        tableListDrivers.print();
-        System.out.println();
+        printOneDriver(id);
         driversMenu();
     }
 
