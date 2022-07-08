@@ -279,8 +279,8 @@ public class Console {
                 printTransports("\tУсі транспортні засоби без водія", transportService.getListOfTransportWithoutDriver());
                 transportsMenu();
                 break;
-            case "7":
-            case "8":
+            case "7": // todo написати функціонал
+            case "8": // todo написати функціонал
             case "9":
                 mainMenu();
                 break;
