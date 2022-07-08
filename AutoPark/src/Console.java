@@ -11,7 +11,6 @@ import services.TransportService;
 import services.impls.DriverServiceImpl;
 import services.impls.RouteServiceImpl;
 import services.impls.TransportServiceImpl;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -27,20 +26,20 @@ public class Console {
     RouteService routeService = new RouteServiceImpl(routeRepo);
 
     public void addDefaultData() {
-        transportService.addTransport(new Bus(1, "MAN", 50, DriverQualificationEnum.BUS_DRIVER, "Coach",3));
-        transportService.addTransport(new Bus(2, "Electron", 48, DriverQualificationEnum.BUS_DRIVER, "Minibus",2));
-        transportService.addTransport(new Bus(3, "TATRA", 25, DriverQualificationEnum.BUS_DRIVER, "City bus",2));
-        transportService.addTransport(new Bus(4, "Mercedes-Benz", 51, DriverQualificationEnum.BUS_DRIVER, "City bus",2));
-        transportService.addTransport(new Bus(5, "Богдан", 15, DriverQualificationEnum.BUS_DRIVER, "City bus",2));
-        transportService.addTransport(new Bus(6, "Ikarus", 70, DriverQualificationEnum.BUS_DRIVER, "Coach",2));
-        transportService.addTransport(new Bus(7, "Temsa", 46, DriverQualificationEnum.BUS_DRIVER, "City bus",2));
-        transportService.addTransport(new Bus(8, "Volvo", 60, DriverQualificationEnum.BUS_DRIVER, "Coach",3));
-        transportService.addTransport(new Bus(9, "Богдан", 15, DriverQualificationEnum.BUS_DRIVER, "Minibus",1));
-        transportService.addTransport(new Bus(10, "Electron", 48, DriverQualificationEnum.BUS_DRIVER, "City bus",4));
-        transportService.addTransport(new Bus(11, "Electron", 48, DriverQualificationEnum.BUS_DRIVER, "City bus",2));
-        transportService.addTransport(new Bus(12, "MAN", 50, DriverQualificationEnum.BUS_DRIVER, "City bus",2));
-        transportService.addTransport(new Bus(13, "Mercedes-Benz", 60, DriverQualificationEnum.BUS_DRIVER, "Coach",4));
-        transportService.addTransport(new Bus(14, "Mercedes-Benz", 55, DriverQualificationEnum.BUS_DRIVER, "City bus",2));
+        transportService.addTransport(new Bus(1, "MAN", 50, DriverQualificationEnum.BUS_DRIVER, "Coach", 3));
+        transportService.addTransport(new Bus(2, "Electron", 48, DriverQualificationEnum.BUS_DRIVER, "Minibus", 2));
+        transportService.addTransport(new Bus(3, "TATRA", 25, DriverQualificationEnum.BUS_DRIVER, "City bus", 2));
+        transportService.addTransport(new Bus(4, "Mercedes-Benz", 51, DriverQualificationEnum.BUS_DRIVER, "City bus", 2));
+        transportService.addTransport(new Bus(5, "Богдан", 15, DriverQualificationEnum.BUS_DRIVER, "City bus", 2));
+        transportService.addTransport(new Bus(6, "Ikarus", 70, DriverQualificationEnum.BUS_DRIVER, "Coach", 2));
+        transportService.addTransport(new Bus(7, "Temsa", 46, DriverQualificationEnum.BUS_DRIVER, "City bus", 2));
+        transportService.addTransport(new Bus(8, "Volvo", 60, DriverQualificationEnum.BUS_DRIVER, "Coach", 3));
+        transportService.addTransport(new Bus(9, "Богдан", 15, DriverQualificationEnum.BUS_DRIVER, "Minibus", 1));
+        transportService.addTransport(new Bus(10, "Electron", 48, DriverQualificationEnum.BUS_DRIVER, "City bus", 4));
+        transportService.addTransport(new Bus(11, "Electron", 48, DriverQualificationEnum.BUS_DRIVER, "City bus", 2));
+        transportService.addTransport(new Bus(12, "MAN", 50, DriverQualificationEnum.BUS_DRIVER, "City bus", 2));
+        transportService.addTransport(new Bus(13, "Mercedes-Benz", 60, DriverQualificationEnum.BUS_DRIVER, "Coach", 4));
+        transportService.addTransport(new Bus(14, "Mercedes-Benz", 55, DriverQualificationEnum.BUS_DRIVER, "City bus", 2));
         transportService.addTransport(new Tram(15, "Electron", 150, DriverQualificationEnum.TRAM_DRIVER, 5));
         transportService.addTransport(new Tram(16, "Electron", 180, DriverQualificationEnum.TRAM_DRIVER, 6));
         transportService.addTransport(new Tram(17, "Electron", 120, DriverQualificationEnum.TRAM_DRIVER, 3));
@@ -155,9 +154,11 @@ public class Console {
                 break;
             case "4": //вивести усі маршрути
                 printRoutes("\tУсі маршрути", routeService.getAllRoutes());
+                routesMenu();
                 break;
             case "5": //вивести маршрути без транспорту
                 printRoutes("\tМаршрути без транспорту", routeService.getAllRoutesWithoutTransport());
+                routesMenu();
                 break;
             case "6": //перейти у попереднє меню
                 mainMenu();
@@ -179,7 +180,7 @@ public class Console {
             tableListRoutes.addRow(String.valueOf(allRoute.getId()), allRoute.getStartPlace(), allRoute.getEndPlace());
         }
         tableListRoutes.print();
-        routesMenu();
+        System.out.println();
     }
 
     private void deletingRoute() {
@@ -242,7 +243,7 @@ public class Console {
         printOneRoute(id);
     }
 
-    private void transportsMenu() { // TODO написати функціонал
+    private void transportsMenu() {
         System.out.println("""
                 \tМеню транспортних засобів
                 1 додати транспорт
@@ -261,18 +262,22 @@ public class Console {
                 break;
             case "2":
                 deletingTransport();
+                transportsMenu();
                 break;
             case "3":
                 printChosenTransport();
+                transportsMenu();
                 break;
             case "4":
                 printTransports("\tУсі транспортні засоби", transportService.getAllTransport());
+                transportsMenu();
                 break;
             case "5":
                 printTransportsChosenBrand();
                 break;
             case "6":
                 printTransports("\tУсі транспортні засоби без водія", transportService.getListOfTransportWithoutDriver());
+                transportsMenu();
                 break;
             case "7":
             case "8":
@@ -290,7 +295,7 @@ public class Console {
                 \tВиберіть тип:
                 1 Автобус
                 2 Тррамвай""");
-        switch (readFromConsole()){
+        switch (readFromConsole()) {
             case "1":
                 addBus();
                 break;
@@ -337,7 +342,7 @@ public class Console {
         int qtyOfTramCars = Integer.parseInt(slitByBlock[3].trim());
         DriverQualificationEnum driverQualificationEnum = DriverQualificationEnum.TRAM_DRIVER;
         Tram newTram = new Tram(id, brand, passengers, driverQualificationEnum, qtyOfTramCars);
-        if (transportService.addTransport(newTram)){
+        if (transportService.addTransport(newTram)) {
             System.out.println("внесено новий транспорт");
             printOneTransport(id);
         }
@@ -356,7 +361,7 @@ public class Console {
         int qtyOfDoors = Integer.parseInt(slitByBlock[4].trim());
         DriverQualificationEnum driverQualificationEnum = DriverQualificationEnum.BUS_DRIVER;
         Bus newBus = new Bus(id, brand, passengers, driverQualificationEnum, type, qtyOfDoors);
-        if (transportService.addTransport(newBus)){
+        if (transportService.addTransport(newBus)) {
             System.out.println("внесено новий транспорт");
             printOneTransport(id);
         }
@@ -365,22 +370,34 @@ public class Console {
     private void printTransportsChosenBrand() {
         String brand = readFromConsole().trim();
         List<Transport> listOfTransportByMark = transportService.getListOfTransportByMark(brand);
-        printTransports("\tУсі транспортні засоби марки " + brand,listOfTransportByMark);
+        printTransports("\tУсі транспортні засоби марки " + brand, listOfTransportByMark);
     }
 
     private void printTransports(String title, List<Transport> transportList) {
         System.out.println(title);
         TableList tableListTransport = new TableList("ID", "Type", "Brand", "Passengers", "Driver ID", "Route ID");
         for (Transport transport : transportList) {
+            String driver;
+            if (transport.getDriver() == null) {
+                driver = "водія не назначено";
+            } else {
+                driver = String.valueOf(transport.getDriver().getId());
+            }
+            String route;
+            if (transport.getRoute() == null) {
+                route = "маршрут не назначено";
+            } else {
+                route = String.valueOf(transport.getRoute().getId());
+            }
             tableListTransport.addRow(String.valueOf(transport.getId()),
                     transport.getDriverQualificationEnum().getType(),
                     transport.getBrand(),
                     String.valueOf(transport.getPassengers()),
-                    String.valueOf(transport.getDriver().getId()),
-                    String.valueOf(transport.getRoute().getId()));
+                    driver,
+                    route);
         }
         tableListTransport.print();
-        transportsMenu();
+        System.out.println();
     }
 
     private void printChosenTransport() {
@@ -390,16 +407,33 @@ public class Console {
     }
 
     private void printOneTransport(int id) {
-        TableList tableListTransport = new TableList("ID", "Type", "Brand", "Passengers", "Driver ID", "Route ID");
-        tableListTransport.addRow(
-                String.valueOf(transportService.getTransportById(id).getId()),
-                transportService.getTransportById(id).getDriverQualificationEnum().getType(),
-                transportService.getTransportById(id).getBrand(),
-                String.valueOf(transportService.getTransportById(id).getPassengers()),
-                String.valueOf(transportService.getTransportById(id).getDriver().getId()),
-                String.valueOf(transportService.getTransportById(id).getRoute().getId()));
-        tableListTransport.print();
-        System.out.println();
+        if (transportService.getTransportById(id)==null){
+            System.out.println("Транспорт з ID "+ id + " відсутній");
+        } else {
+            TableList tableListTransport = new TableList("ID", "Type", "Brand", "Passengers", "Driver ID", "Route ID");
+            String driver;
+            if (transportService.getTransportById(id).getDriver() == null) {
+                driver = "водія не назначено";
+            } else {
+                driver = String.valueOf(transportService.getTransportById(id).getDriver().getId());
+            }
+            String route;
+            if (transportService.getTransportById(id).getRoute() == null) {
+                route = "маршрут не назначено";
+            } else {
+                route = String.valueOf(transportService.getTransportById(id).getRoute().getId());
+            }
+            tableListTransport.addRow(
+                    String.valueOf(transportService.getTransportById(id).getId()),
+                    transportService.getTransportById(id).getDriverQualificationEnum().getType(),
+                    transportService.getTransportById(id).getBrand(),
+                    String.valueOf(transportService.getTransportById(id).getPassengers()),
+                    driver,
+                    route);
+            tableListTransport.print();
+            System.out.println();
+
+        }
     }
 
     private void deletingTransport() {
@@ -557,7 +591,7 @@ public class Console {
                     String.valueOf(driver.getDriverQualificationEnum().getType()));
         }
         tableListDrivers.print();
-        driversMenu();
+        System.out.println();
     }
 
     private void printChosenDriver() {
