@@ -11,6 +11,7 @@ import services.TransportService;
 import services.impls.DriverServiceImpl;
 import services.impls.RouteServiceImpl;
 import services.impls.TransportServiceImpl;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,11 +20,11 @@ import java.util.List;
 
 public class Console {
     TransportRepo transportRepo = new TransportRepoImpl();
-    TransportService transportService = new TransportServiceImpl(transportRepo);
     DriverRepo driverRepo = new DriverRepoImpl();
-    DriverService driverService = new DriverServiceImpl(driverRepo);
     RouteRepo routeRepo = new RouteRepoImpl();
-    RouteService routeService = new RouteServiceImpl(routeRepo);
+    TransportService transportService = new TransportServiceImpl(driverRepo, transportRepo, routeRepo);
+    DriverService driverService = new DriverServiceImpl(driverRepo, transportRepo, routeRepo);
+    RouteService routeService = new RouteServiceImpl(driverRepo, transportRepo, routeRepo);
 
     public void addDefaultData() {
         transportService.addTransport(new Bus(1, "MAN", 50, DriverQualificationEnum.BUS_DRIVER, "Coach", 3));
@@ -185,8 +186,13 @@ public class Console {
 
     private void deletingRoute() {
         System.out.println("Ведіть ID маршруту який ви хочете видалити");
-        int id = Integer.parseInt(readFromConsole());
-        routeService.deleteRoute(id);
+        try {
+            int id = Integer.parseInt(readFromConsole());
+            routeService.deleteRoute(id);
+        } catch (NumberFormatException e) {
+            System.out.println("не коректно введено дані");
+            deletingRoute();
+        }
     }
 
     private void inputNewRoute() {
@@ -204,7 +210,7 @@ public class Console {
                 System.out.println("внесено новий маршрут");
                 printOneRoute(id);
             }
-        } catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
             System.out.println("не вірно внесено дані, внесіть правильно");
             inputNewRoute();
         }
@@ -248,8 +254,13 @@ public class Console {
 
     private void printChosenRoute() {
         System.out.println("Ведіть ID маршруту який ви хочете вивести на екран");
-        int id = Integer.parseInt(readFromConsole());
-        printOneRoute(id);
+        try {
+            int id = Integer.parseInt(readFromConsole());
+            printOneRoute(id);
+        } catch (NumberFormatException e) {
+            System.out.println("не коректно введено дані");
+            printChosenRoute();
+        }
     }
 
     private void transportsMenu() {
@@ -283,19 +294,55 @@ public class Console {
                 break;
             case "5":
                 printTransportsChosenBrand();
+                transportsMenu();
                 break;
             case "6":
                 printTransports("\tУсі транспортні засоби без водія", transportService.getListOfTransportWithoutDriver());
                 transportsMenu();
                 break;
-            case "7": // todo написати функціонал назначити транспорт на маршрут
-            case "8": // todo написати функціонал зняти транспорт з маршруту
+            case "7":
+                transportToRouteConsole();
+                transportsMenu();
+            case "8":
+                removeTransportFromRouteConsole();
+                transportsMenu();
             case "9":
                 mainMenu();
                 break;
             case "q":
                 exit();
                 break;
+        }
+    }
+
+    private void removeTransportFromRouteConsole() {
+        try {
+            System.out.println("Введіть ID транспорту");
+            System.out.println("Transport ID");
+            String s = readFromConsole();
+            int transportId = Integer.parseInt(s);
+            if (transportService.getTransportById(transportId).getRoute() == null) {
+                System.out.println("Даний транспорт не було назначено на маршрут");
+                return;
+            }
+            transportService.removeTransportFromTheRoute(transportId);
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+            System.out.println("не вірно внесено дані, внесіть правильно");
+            removeTransportFromRouteConsole();
+        }
+    }
+
+    private void transportToRouteConsole() {
+        try {
+            System.out.println("Введіть ID транспорту і ID маршруту, використовуйте \"|\" в якості розділювача");
+            System.out.println("Transport ID | Route ID");
+            String[] slitByBlock = readFromConsole().split("\\|");
+            int transportId = Integer.parseInt(slitByBlock[0].trim());
+            int routeId = Integer.parseInt(slitByBlock[1].trim());
+            transportService.transportToRoute(transportId, routeId);
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+            System.out.println("не вірно внесено дані, внесіть правильно");
+            transportToRouteConsole();
         }
     }
 
@@ -356,7 +403,7 @@ public class Console {
                 System.out.println("внесено новий транспорт");
                 printOneTransport(id);
             }
-        } catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
             System.out.println("не вірно внесено дані, внесіть правильно");
             inputNewTransport();
         }
@@ -381,13 +428,14 @@ public class Console {
                 System.out.println("внесено новий транспорт");
                 printOneTransport(id);
             }
-        }  catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
             System.out.println("не вірно внесено дані, внесіть правильно");
             inputNewTransport();
         }
     }
 
     private void printTransportsChosenBrand() {
+        System.out.println("Введіть марку");
         String brand = readFromConsole().trim();
         List<Transport> listOfTransportByMark = transportService.getListOfTransportByMark(brand);
         printTransports("\tУсі транспортні засоби марки " + brand, listOfTransportByMark);
@@ -422,8 +470,13 @@ public class Console {
 
     private void printChosenTransport() {
         System.out.println("Ведіть ID транспорту який ви хочете вивести на екран");
-        int id = Integer.parseInt(readFromConsole());
-        printOneTransport(id);
+        try {
+            int id = Integer.parseInt(readFromConsole());
+            printOneTransport(id);
+        } catch (NumberFormatException e) {
+            System.out.println("не вірно внесено дані, внесіть правильно");
+            printChosenRoute();
+        }
     }
 
     private void printOneTransport(int id) {
@@ -457,8 +510,12 @@ public class Console {
 
     private void deletingTransport() {
         System.out.println("Ведіть ID транспорту який ви хочете видалити");
-        int id = Integer.parseInt(readFromConsole());
-        transportService.deleteTransport(id);
+        try {
+            int id = Integer.parseInt(readFromConsole());
+            transportService.deleteTransport(id);
+        }catch (NumberFormatException e) {
+            System.out.println("не вірно внесено дані, внесіть правильно");
+        }
     }
 
     private void driversMenu() {
@@ -533,7 +590,7 @@ public class Console {
                 System.out.println("внесено нового водія");
                 printOneDriver(id);
             }
-        }catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException| NumberFormatException e) {
             System.out.println("не вірно внесено дані, внесіть правильно");
             inputNewDriver();
         }
@@ -589,8 +646,12 @@ public class Console {
 
     private void printDriversOnChosenRoute() {
         System.out.println("Введіть ID маршруту");
-        int route = Integer.parseInt(readFromConsole().trim());
-        printDrivers("\tУсі водії на маршруті з ID " + route, driverService.getAllDriversOnTheRoute(route));
+        try {
+            int route = Integer.parseInt(readFromConsole().trim());
+            printDrivers("\tУсі водії на маршруті з ID " + route, driverService.getAllDriversOnTheRoute(route));
+        } catch (NumberFormatException e){
+            System.out.println("не вірно внесено дані, внесіть правильно");
+        }
     }
 
     private void printDriversWithChosenSurname() {
@@ -606,20 +667,19 @@ public class Console {
             String[] slitByBlock = readFromConsole().split("\\|");
             int driverId = Integer.parseInt(slitByBlock[0].trim());
             int transportId = Integer.parseInt(slitByBlock[1].trim());
-            Driver driver = driverService.getDriverById(driverId);
-            Transport transport = transportService.getTransportById(transportId);
-            if (driver == null || transport == null){
-                System.out.printf("Транспорт з ID %d не було закріплено за водієм з ID %d,\n водій або транспорт не існує\n", transportId, driverId);
-                return;
-            }
-            driverService.assignDriverToTransport(driver, transport);
-        }catch (NumberFormatException | IndexOutOfBoundsException e ){
+            driverService.assignDriverToTransport(driverId, transportId);
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
             System.out.println("не вірно внесено дані, внесіть правильно");
             driverToTransport();
         }
     }
 
     private void printDrivers(String title, List<Driver> driverList) {
+        if (driverList.size() == 0) {
+            System.out.println("Не знайдено жодного водія");
+            System.out.println();
+            return;
+        }
         System.out.println(title);
         TableList tableListDrivers = new TableList("ID", "Name", "Surname", "Phone number", "Driver license");
         for (Driver driver : driverList) {
@@ -636,14 +696,28 @@ public class Console {
 
     private void printChosenDriver() {
         System.out.println("Ведіть ID водія якого ви хочете вивести на екран");
-        int id = Integer.parseInt(readFromConsole());
-        printOneDriver(id);
+        try {
+            int id = Integer.parseInt(readFromConsole());
+            printOneDriver(id);
+        }catch (NumberFormatException e){
+            System.out.println("не вірно внесено дані, внесіть правильно");
+            printChosenDriver();
+        }
         driversMenu();
     }
 
     private void deletingDriver() {
         System.out.println("Ведіть ID водія якого ви хочете видалити");
-        int id = Integer.parseInt(readFromConsole());
-        driverService.deleteDriver(id);
+        try {
+            int id = Integer.parseInt(readFromConsole());
+            if (!driverRepo.isPresent(id)) {
+                System.out.println("Водій з даним ID відсутній у базі\n");
+                return;
+            }
+            driverService.deleteDriver(id);
+        }catch (NumberFormatException e){
+            System.out.println("не вірно внесено дані, внесіть правильно");
+            deletingDriver();
+        }
     }
 }

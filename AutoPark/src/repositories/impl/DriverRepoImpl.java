@@ -41,7 +41,7 @@ public class DriverRepoImpl implements DriverRepo {
             }
         }
         System.out.println("Водій з id "+ id + " відсутній у базі");
-        return null; // TODO Тут краще спочатку перевірити, чи більше введений id ніж list.size(),
+        return null; //TODO Тут краще спочатку перевірити, чи більше введений id ніж list.size(),
                     // щоб не перебирати дарма. Також, повертати null не дуже, тоді краще його в Optional завернути додатково.
     }
 

@@ -1,15 +1,14 @@
 package repositories.impl;
 
-import entities.Driver;
 import entities.Transport;
 import repositories.TransportRepo;
-
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class TransportRepoImpl implements TransportRepo {
     private final List<Transport> transportList;
+
 
     public TransportRepoImpl() {
         this.transportList = new ArrayList<>();

@@ -1,18 +1,22 @@
 package services.impls;
 
-import entities.Driver;
 import entities.Route;
 import entities.Transport;
+import repositories.DriverRepo;
 import repositories.RouteRepo;
-import repositories.impl.TransportRepoImpl;
+import repositories.TransportRepo;
 import services.RouteService;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RouteServiceImpl implements RouteService {
+    private final DriverRepo driverRepo;
+    private final TransportRepo transportRepo;
     private final RouteRepo routeRepo;
 
-    public RouteServiceImpl(RouteRepo routeRepo) {
+    public RouteServiceImpl(DriverRepo driverRepo, TransportRepo transportRepo, RouteRepo routeRepo) {
+        this.driverRepo = driverRepo;
+        this.transportRepo = transportRepo;
         this.routeRepo = routeRepo;
     }
 
@@ -24,11 +28,13 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public boolean deleteRoute(int id) {
         if (routeRepo.isPresent(id)){
-            List<Transport> transports = new TransportRepoImpl().getAllTransport();
+            List<Transport> transports = transportRepo.getAllTransport();
             for (Transport transport : transports) {
-                if (transport.getRoute().getId() == id) {
-                    System.out.println("Маршрут не видалено, на маршруті є транспорт");
-                    return false;
+                if(transport.getRoute()!=null){
+                    if (transport.getRoute().getId() == id) {
+                        System.out.println("Маршрут не видалено, на маршруті є транспорт");
+                        return false;
+                    }
                 }
             }
             if (routeRepo.deleteRoute(id)) {
@@ -55,7 +61,7 @@ public class RouteServiceImpl implements RouteService {
         List<Route> allRoutes = getAllRoutes();
         List<Route> allRoutesWithTransport = new ArrayList<>();
         List<Route> allRoutesWithoutTransport = new ArrayList<>();
-        List<Transport> getAllTransport = new TransportRepoImpl().getAllTransport();
+        List<Transport> getAllTransport = transportRepo.getAllTransport();
         for (Transport transport : getAllTransport) {
             if (!allRoutesWithTransport.contains(transport.getRoute())) {
                 allRoutesWithTransport.add(transport.getRoute());
