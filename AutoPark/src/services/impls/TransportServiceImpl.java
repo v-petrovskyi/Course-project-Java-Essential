@@ -3,6 +3,7 @@ package services.impls;
 import entities.Driver;
 import entities.Route;
 import repositories.TransportRepo;
+import repositories.impl.DriverRepoImpl;
 import repositories.impl.RouteRepoImpl;
 import services.TransportService;
 import entities.Transport;
@@ -19,26 +20,20 @@ public class TransportServiceImpl implements TransportService {
 
     @Override
     public boolean addTransport(Transport transport) {
-        for (Transport transport1 : getAllTransport()) {
-            if (transport.getId() == transport1.getId()) {
-                try {
-                    throw new Exception("транспорт з ID " + transport.getId() + " є у базі");
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    return false;
-                }
-            }
-        }
         return transportRepo.addTransport(transport);
     }
 
     @Override
     public boolean deleteTransport(int id) {
-        if (getTransportById(id).getDriver() == null) {
-            System.out.println("Транспорт "+ id + "успішно видалено");
-            return transportRepo.deleteTransport(id);
+        if (transportRepo.isPresent(id)){
+            if (getTransportById(id).getDriver() == null) {
+                System.out.println("Транспорт "+ id + "успішно видалено");
+                return transportRepo.deleteTransport(id);
+            }
+            System.out.println("Транспорт не видалено. На даному транспорі є водій, \nперед видаленням зніміть водія з транспорту");
+            return false;
         }
-        System.out.println("Транспорт не видалено. На даному транспорі є водій, \nперед видаленням зніміть водія з транспорту");
+        System.out.println("Транспорт з ID " + id + " відсутній у базі" );
         return false;
     }
 
@@ -78,12 +73,15 @@ public class TransportServiceImpl implements TransportService {
 
     @Override
     public boolean transportToRoute(int transportId, int routeId) {
-        Transport transport = getTransportById(transportId);
-        if (transport.getDriver() != null) {
-            Route route = new RouteRepoImpl().getRouteById(routeId);
-            transport.setRoute(route);
-            return true;
+        if (transportRepo.isPresent(transportId)&(new RouteRepoImpl().isPresent(routeId))){
+            Transport transport = getTransportById(transportId);
+            if (transport.getDriver() != null) {
+                Route route = new RouteRepoImpl().getRouteById(routeId);
+                transport.setRoute(route);
+                return true;
+            }
         }
+        System.out.printf("Транспорт з ID %d не був поставлено на маршрут з ID %d,\n маршрут або транспорт не існує\n", transportId, routeId);
         return false;
     }
 

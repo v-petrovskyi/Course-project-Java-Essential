@@ -1,7 +1,9 @@
 package repositories.impl;
 
+import entities.Driver;
 import entities.Transport;
 import repositories.TransportRepo;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,19 +17,29 @@ public class TransportRepoImpl implements TransportRepo {
 
     @Override
     public boolean addTransport(Transport transport) {
-        return transportList.add(transport);
+        if (!isPresent(transport.getId())){
+            return transportList.add(transport);
+        }
+        try {
+            throw new Exception("транспорт з ID " + transport.getId() + " є у базі");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
     @Override
     public boolean deleteTransport(int id) {
-        return transportList.remove(getTransportById(id));
+         return transportList.remove(getTransportById(id));
     }
 
     @Override
     public Transport getTransportById(int id) {
-        for (Transport transport : transportList) {
-            if (transport.getId()==id){
-                return transport;
+        if (isPresent(id)) {
+            for (Transport transport : transportList) {
+                if (transport.getId() == id) {
+                    return transport;
+                }
             }
         }
         return null; // TODO Тут краще спочатку перевірити, чи більше введений id ніж list.size(),
@@ -37,5 +49,15 @@ public class TransportRepoImpl implements TransportRepo {
     @Override
     public List<Transport> getAllTransport() {
         return transportList;
+    }
+
+    @Override
+    public boolean isPresent(int transportId) {
+        for (Transport transport : transportList) {
+            if (transport.getId() == transportId) {
+                return true;
+            }
+        }
+        return false;
     }
 }

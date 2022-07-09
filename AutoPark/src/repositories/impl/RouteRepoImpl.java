@@ -2,7 +2,6 @@ package repositories.impl;
 
 import entities.Route;
 import repositories.RouteRepo;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,15 @@ public class RouteRepoImpl implements RouteRepo {
 
     @Override
     public boolean addRoute(Route route) {
-        return routesList.add(route);
+        if(!isPresent(route.getId())){
+            return routesList.add(route);
+        }
+        try {
+            throw new Exception("маршрут з ID " + route.getId() + " є у базі");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
     @Override
@@ -25,9 +32,11 @@ public class RouteRepoImpl implements RouteRepo {
 
     @Override
     public Route getRouteById(int id) {
-        for (Route route : routesList) {
-            if (route.getId() == id) {
-                return route;
+        if (isPresent(id)) {
+            for (Route route : routesList) {
+                if (route.getId() == id) {
+                    return route;
+                }
             }
         }
         return null; // TODO Тут краще спочатку перевірити, чи більше введений id ніж list.size(),
@@ -37,5 +46,16 @@ public class RouteRepoImpl implements RouteRepo {
     @Override
     public List<Route> getAllRoute() {
         return routesList;
+    }
+
+    @Override
+    public boolean isPresent(int routeId) {
+        for (Route route : routesList) {
+            if (route.getId() == routeId) {
+                return true;
+            }
+        }
+        return false;
+
     }
 }

@@ -9,4 +9,5 @@ public interface DriverRepo {
     boolean deleteDriver(int id);
     Driver getDriverById(int id);
     List<Driver> getAllDrivers();
+    boolean isPresent(int id);
 }

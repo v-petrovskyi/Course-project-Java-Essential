@@ -8,7 +8,5 @@ public interface TransportRepo {
     boolean deleteTransport(int id);
     Transport getTransportById(int id);
     List<Transport> getAllTransport();
-
-
-
+    boolean isPresent(int transportId);
 }

@@ -13,5 +13,4 @@ public interface DriverService {
     List<Driver> getAllDriversOnTheRoute(int routeId);
     List<Driver> getAllDriversWithoutTransport();
     boolean assignDriverToTransport(int driverId, int transportId);
-
 }

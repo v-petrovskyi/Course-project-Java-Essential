@@ -1,11 +1,11 @@
 package services.impls;
 
+import entities.Driver;
 import entities.Route;
 import entities.Transport;
 import repositories.RouteRepo;
 import repositories.impl.TransportRepoImpl;
 import services.RouteService;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,35 +18,26 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public boolean addRoute(Route route) {
-        for (Route route1 : getAllRoutes()) {
-            if (route.getId() == route1.getId()) {
-                try {
-                    throw new Exception("маршрут з ID " + route.getId() + " є у базі");
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    return false;
-                }
-            }
-        }
         return routeRepo.addRoute(route);
     }
 
     @Override
     public boolean deleteRoute(int id) {
-        List<Transport> transports = new TransportRepoImpl().getAllTransport();
-        for (Transport transport : transports) {
-            if (transport.getRoute().getId() == id) {
-                System.out.println("Маршрут не видалено, на маршруті є транспорт");
-                return false;
+        if (routeRepo.isPresent(id)){
+            List<Transport> transports = new TransportRepoImpl().getAllTransport();
+            for (Transport transport : transports) {
+                if (transport.getRoute().getId() == id) {
+                    System.out.println("Маршрут не видалено, на маршруті є транспорт");
+                    return false;
+                }
+            }
+            if (routeRepo.deleteRoute(id)) {
+                System.out.println("Маршрут з ID " + id + " успішно видалено");
+                return true;
             }
         }
-        if (routeRepo.deleteRoute(id)) {
-            System.out.println("Маршрут з ID " + id + " успішно видалено");
-            return true;
-        } else {
-            System.out.println("Маршрут з ID " + id + " не знайдено");
-            return false;
-        }
+        System.out.println("Маршрут з ID " + id + " не знайдено");
+        return false;
     }
 
     @Override
@@ -77,4 +68,5 @@ public class RouteServiceImpl implements RouteService {
         }
         return allRoutesWithoutTransport;
     }
+
 }

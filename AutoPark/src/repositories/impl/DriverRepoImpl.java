@@ -11,12 +11,19 @@ public class DriverRepoImpl implements DriverRepo {
 
     public DriverRepoImpl() {
         this.driverList = new ArrayList<>();
-
     }
 
     @Override
     public boolean addDriver(Driver driver) {
-        return driverList.add(driver);
+        if (!isPresent(driver.getId())){
+            return driverList.add(driver);
+        }
+        try {
+            throw new Exception("водій з ID " + driver.getId() + " є у базі");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
     @Override
@@ -26,9 +33,11 @@ public class DriverRepoImpl implements DriverRepo {
 
     @Override
     public Driver getDriverById(int id) {
-        for (Driver driver : driverList) {
-            if (driver.getId() == id) {
-                return driver;
+        if (isPresent(id)){
+            for (Driver driver : driverList) {
+                if (driver.getId() == id) {
+                    return driver;
+                }
             }
         }
         return null; // TODO Тут краще спочатку перевірити, чи більше введений id ніж list.size(),
@@ -38,5 +47,14 @@ public class DriverRepoImpl implements DriverRepo {
     @Override
     public List<Driver> getAllDrivers() {
         return driverList;
+    }
+    @Override
+    public boolean isPresent(int id) {
+        for (Driver driver : driverList) {
+            if (driver.getId() == id) {
+                return true;
+            }
+        }
+        return false;
     }
 }

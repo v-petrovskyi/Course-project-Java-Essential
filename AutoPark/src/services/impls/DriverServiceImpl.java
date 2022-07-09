@@ -4,11 +4,9 @@ import entities.Driver;
 import entities.Route;
 import entities.Transport;
 import repositories.DriverRepo;
-import repositories.TransportRepo;
 import repositories.impl.RouteRepoImpl;
 import repositories.impl.TransportRepoImpl;
 import services.DriverService;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,33 +19,25 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public boolean addDriver(Driver driver) {
-        for (Driver driver1 : getAllDrivers()) {
-            if (driver.getId() == driver1.getId()) {
-                try {
-                    throw new Exception("водій з ID " + driver.getId() + " є у базі");
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    return false;
-                }
-            }
-        }
         return driverRepo.addDriver(driver);
     }
 
     @Override
     public boolean deleteDriver(int id) {
-        List<Transport> allTransport = new TransportRepoImpl().getAllTransport();
-        for (Transport transport : allTransport) {
-            if (transport.getDriver().getId() == id) {
-                try {
-                    throw new Exception("driver is on a route");
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
+        if (driverRepo.isPresent(id)) {
+            List<Transport> allTransport = new TransportRepoImpl().getAllTransport();
+            for (Transport transport : allTransport) {
+                if (transport.getDriver().getId() == id) {
+                    try {
+                        throw new Exception("driver is on a route");
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
             }
+            return driverRepo.deleteDriver(id);
         }
-        // TODO додати перевірку чи існує водій з даним ID
-        return driverRepo.deleteDriver(id);
+        return false;
     }
 
     @Override
@@ -60,7 +50,7 @@ public class DriverServiceImpl implements DriverService {
         List<Driver> allDriversBySurname = new ArrayList<>();
         List<Driver> allDrivers = getAllDrivers();
         for (Driver driver : allDrivers) {
-            if (driver.getSurname().equals(surname)){
+            if (driver.getSurname().equals(surname)) {
                 allDriversBySurname.add(driver);
             }
         }
@@ -74,13 +64,17 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public List<Driver> getAllDriversOnTheRoute(int routeId) {
-        Route route = new RouteRepoImpl().getRouteById(routeId);
         List<Driver> allDriversOnTheRoute = new ArrayList<>();
-        List<Transport> allTransport = new TransportRepoImpl().getAllTransport();
-        for (Transport transport : allTransport) {
-            if (transport.getRoute().equals(route)) {
-                allDriversOnTheRoute.add(transport.getDriver());
+        if (new RouteRepoImpl().isPresent(routeId)){
+            Route route = new RouteRepoImpl().getRouteById(routeId);
+            List<Transport> allTransport = new TransportRepoImpl().getAllTransport();
+            for (Transport transport : allTransport) {
+                if (transport.getRoute().equals(route)) {
+                    allDriversOnTheRoute.add(transport.getDriver());
+                }
             }
+        } else {
+            System.out.println("Маршрут відсутній");
         }
         return allDriversOnTheRoute;
     }
@@ -91,13 +85,13 @@ public class DriverServiceImpl implements DriverService {
         List<Driver> allDriversWithTransport = new ArrayList<>();
         List<Transport> allTransport = new TransportRepoImpl().getAllTransport();
         for (Transport transport : allTransport) {
-            if (transport.getDriver() != null){
+            if (transport.getDriver() != null) {
                 allDriversWithTransport.add(transport.getDriver());
             }
         }
         List<Driver> allDrivers = getAllDrivers();
         for (Driver driver : allDrivers) {
-            if(!allDriversWithTransport.contains(driver)){
+            if (!allDriversWithTransport.contains(driver)) {
                 allDriversWithoutTransport.add(driver);
             }
         }
@@ -106,12 +100,15 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public boolean assignDriverToTransport(int driverId, int transportId) {
-        Transport currentTransport = new TransportRepoImpl().getTransportById(transportId);
-        Driver driver = getDriverById(driverId);
-        if (driver.getDriverQualificationEnum().equals(currentTransport.getDriverQualificationEnum())) {
-            currentTransport.setDriver(driver);
-            return true;
+        if (driverRepo.isPresent(driverId) & (new TransportRepoImpl().isPresent(transportId))) { //todo дописати
+            Driver driver = getDriverById(driverId);
+            Transport currentTransport = new TransportRepoImpl().getTransportById(transportId);
+            if (driver.getDriverQualificationEnum().equals(currentTransport.getDriverQualificationEnum())) {
+                currentTransport.setDriver(driver);
+                return true;
+            }
         }
+        System.out.printf("Водій з ID %d не був закріплений за транспортом ID %d,\n водій або транспорт не існує\n", driverId, transportId);
         return false;
     }
 }

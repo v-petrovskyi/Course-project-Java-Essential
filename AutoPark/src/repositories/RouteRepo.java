@@ -10,4 +10,5 @@ public interface RouteRepo {
     boolean deleteRoute(int id);
     Route getRouteById(int id);
     List<Route> getAllRoute();
+    boolean isPresent(int routeId);
 }
