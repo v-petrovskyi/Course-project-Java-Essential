@@ -65,7 +65,7 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public List<Driver> getAllDriversOnTheRoute(int routeId) {
         List<Driver> allDriversOnTheRoute = new ArrayList<>();
-        if (new RouteRepoImpl().isPresent(routeId)){
+        if (new RouteRepoImpl().isPresent(routeId)) {
             Route route = new RouteRepoImpl().getRouteById(routeId);
             List<Transport> allTransport = new TransportRepoImpl().getAllTransport();
             for (Transport transport : allTransport) {
@@ -99,16 +99,14 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public boolean assignDriverToTransport(int driverId, int transportId) {
-        if (driverRepo.isPresent(driverId) & (new TransportRepoImpl().isPresent(transportId))) { //todo дописати
-            Driver driver = getDriverById(driverId);
-            Transport currentTransport = new TransportRepoImpl().getTransportById(transportId);
-            if (driver.getDriverQualificationEnum().equals(currentTransport.getDriverQualificationEnum())) {
-                currentTransport.setDriver(driver);
-                return true;
-            }
+    public boolean assignDriverToTransport(Driver driver, Transport transport) {
+        if (driver.getDriverQualificationEnum().equals(transport.getDriverQualificationEnum())) {
+            transport.setDriver(driver);
+            System.out.printf("Водій з ID %d успішно закріплений за транспортом ID %d.\n ", driver.getId(), transport.getId());
+            return true;
+        }else {
+            System.out.printf("Водій з ID %d не був закріплений за транспортом ID %d,\n водій не має кваліфікації на даний транспорт\n", driver.getId(), transport.getId());
+            return false;
         }
-        System.out.printf("Водій з ID %d не був закріплений за транспортом ID %d,\n водій або транспорт не існує\n", driverId, transportId);
-        return false;
     }
 }

@@ -194,14 +194,19 @@ public class Console {
                 Введіть дані маршруту, використовуйте "|" в якості розділювача
                                         
                 ID | Start Place         | End Place             """);
-        String[] slitByBlock = readFromConsole().split("\\|");
-        int id = Integer.parseInt(slitByBlock[0].trim());
-        String startPlace = slitByBlock[1].trim();
-        String endPlace = slitByBlock[2].trim();
-        Route newRoute = new Route(id, startPlace, endPlace);
-        if (routeService.addRoute(newRoute)) {
-            System.out.println("внесено новий маршрут");
-            printOneRoute(id);
+        try {
+            String[] slitByBlock = readFromConsole().split("\\|");
+            int id = Integer.parseInt(slitByBlock[0].trim());
+            String startPlace = slitByBlock[1].trim();
+            String endPlace = slitByBlock[2].trim();
+            Route newRoute = new Route(id, startPlace, endPlace);
+            if (routeService.addRoute(newRoute)) {
+                System.out.println("внесено новий маршрут");
+                printOneRoute(id);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("не вірно внесено дані, внесіть правильно");
+            inputNewRoute();
         }
 
         System.out.println("""
@@ -229,12 +234,16 @@ public class Console {
     }
 
     private void printOneRoute(int id) {
-        TableList tableListRoutes = new TableList(3, "ID", "Start Place", "End Place");
-        tableListRoutes.addRow(String.valueOf(routeService.getRouteById(id).getId()),
-                routeService.getRouteById(id).getStartPlace(),
-                routeService.getRouteById(id).getEndPlace());
-        tableListRoutes.print();
-        System.out.println();
+        if (routeRepo.isPresent(id)) {
+            TableList tableListRoutes = new TableList(3, "ID", "Start Place", "End Place");
+            tableListRoutes.addRow(String.valueOf(routeService.getRouteById(id).getId()),
+                    routeService.getRouteById(id).getStartPlace(),
+                    routeService.getRouteById(id).getEndPlace());
+            tableListRoutes.print();
+            System.out.println();
+        } else {
+            System.out.println("маршрут з ID " + id + " не існує");
+        }
     }
 
     private void printChosenRoute() {
@@ -279,8 +288,8 @@ public class Console {
                 printTransports("\tУсі транспортні засоби без водія", transportService.getListOfTransportWithoutDriver());
                 transportsMenu();
                 break;
-            case "7": // todo написати функціонал
-            case "8": // todo написати функціонал
+            case "7": // todo написати функціонал назначити транспорт на маршрут
+            case "8": // todo написати функціонал зняти транспорт з маршруту
             case "9":
                 mainMenu();
                 break;
@@ -335,17 +344,23 @@ public class Console {
                 Введіть дані транспорту, використовуйте "|" в якості розділювача
                                         
                 ID | Brand   |   Passengers   |  Qty of tram cars""");
-        String[] slitByBlock = readFromConsole().split("\\|");
-        int id = Integer.parseInt(slitByBlock[0].trim());
-        String brand = slitByBlock[1].trim();
-        int passengers = Integer.parseInt(slitByBlock[2].trim());
-        int qtyOfTramCars = Integer.parseInt(slitByBlock[3].trim());
-        DriverQualificationEnum driverQualificationEnum = DriverQualificationEnum.TRAM_DRIVER;
-        Tram newTram = new Tram(id, brand, passengers, driverQualificationEnum, qtyOfTramCars);
-        if (transportService.addTransport(newTram)) {
-            System.out.println("внесено новий транспорт");
-            printOneTransport(id);
+        try {
+            String[] slitByBlock = readFromConsole().split("\\|");
+            int id = Integer.parseInt(slitByBlock[0].trim());
+            String brand = slitByBlock[1].trim();
+            int passengers = Integer.parseInt(slitByBlock[2].trim());
+            int qtyOfTramCars = Integer.parseInt(slitByBlock[3].trim());
+            DriverQualificationEnum driverQualificationEnum = DriverQualificationEnum.TRAM_DRIVER;
+            Tram newTram = new Tram(id, brand, passengers, driverQualificationEnum, qtyOfTramCars);
+            if (transportService.addTransport(newTram)) {
+                System.out.println("внесено новий транспорт");
+                printOneTransport(id);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("не вірно внесено дані, внесіть правильно");
+            inputNewTransport();
         }
+
     }
 
     private void addBus() {
@@ -353,17 +368,22 @@ public class Console {
                 Введіть дані транспорту, використовуйте "|" в якості розділювача
                                         
                 ID | Brand   |   Passengers   |  Type   |  Qty of doors""");
-        String[] slitByBlock = readFromConsole().split("\\|");
-        int id = Integer.parseInt(slitByBlock[0].trim());
-        String brand = slitByBlock[1].trim();
-        int passengers = Integer.parseInt(slitByBlock[2].trim());
-        String type = slitByBlock[3].trim();
-        int qtyOfDoors = Integer.parseInt(slitByBlock[4].trim());
-        DriverQualificationEnum driverQualificationEnum = DriverQualificationEnum.BUS_DRIVER;
-        Bus newBus = new Bus(id, brand, passengers, driverQualificationEnum, type, qtyOfDoors);
-        if (transportService.addTransport(newBus)) {
-            System.out.println("внесено новий транспорт");
-            printOneTransport(id);
+        try {
+            String[] slitByBlock = readFromConsole().split("\\|");
+            int id = Integer.parseInt(slitByBlock[0].trim());
+            String brand = slitByBlock[1].trim();
+            int passengers = Integer.parseInt(slitByBlock[2].trim());
+            String type = slitByBlock[3].trim();
+            int qtyOfDoors = Integer.parseInt(slitByBlock[4].trim());
+            DriverQualificationEnum driverQualificationEnum = DriverQualificationEnum.BUS_DRIVER;
+            Bus newBus = new Bus(id, brand, passengers, driverQualificationEnum, type, qtyOfDoors);
+            if (transportService.addTransport(newBus)) {
+                System.out.println("внесено новий транспорт");
+                printOneTransport(id);
+            }
+        }  catch (IndexOutOfBoundsException e) {
+            System.out.println("не вірно внесено дані, внесіть правильно");
+            inputNewTransport();
         }
     }
 
@@ -407,9 +427,7 @@ public class Console {
     }
 
     private void printOneTransport(int id) {
-        if (transportService.getTransportById(id)==null){
-            System.out.println("Транспорт з ID "+ id + " відсутній");
-        } else {
+        if (transportRepo.isPresent(id)) {
             TableList tableListTransport = new TableList("ID", "Type", "Brand", "Passengers", "Driver ID", "Route ID");
             String driver;
             if (transportService.getTransportById(id).getDriver() == null) {
@@ -432,7 +450,8 @@ public class Console {
                     route);
             tableListTransport.print();
             System.out.println();
-
+        } else {
+            System.out.println("Транспорт з ID " + id + " відсутній");
         }
     }
 
@@ -485,6 +504,7 @@ public class Console {
                 break;
             case "8": //назначити водія на транспорт
                 driverToTransport();
+                driversMenu();
                 break;
             case "9": //перейти у попереднє меню
                 mainMenu();
@@ -500,17 +520,22 @@ public class Console {
                 Введіть дані маршруту, використовуйте "|" в якості розділювача
                                         
                  ID | Name  | Surname | Phone number | Driver license (Автобус або Трамвай)""");
-        String[] slitByBlock = readFromConsole().split("\\|");
-        int id = Integer.parseInt(slitByBlock[0].trim());
-        String name = slitByBlock[1].trim();
-        String surname = slitByBlock[2].trim();
-        String phoneNumber = slitByBlock[3].trim();
-        String driverQualification = slitByBlock[4].trim();
-        DriverQualificationEnum driverQualificationEnum = getDriverQualificationEnum(driverQualification);
-        Driver newDriver = new Driver(id, name, surname, phoneNumber, driverQualificationEnum);
-        if (driverService.addDriver(newDriver)) {
-            System.out.println("внесено нового водія");
-            printOneDriver(id);
+        try {
+            String[] slitByBlock = readFromConsole().split("\\|");
+            int id = Integer.parseInt(slitByBlock[0].trim());
+            String name = slitByBlock[1].trim();
+            String surname = slitByBlock[2].trim();
+            String phoneNumber = slitByBlock[3].trim();
+            String driverQualification = slitByBlock[4].trim();
+            DriverQualificationEnum driverQualificationEnum = getDriverQualificationEnum(driverQualification);
+            Driver newDriver = new Driver(id, name, surname, phoneNumber, driverQualificationEnum);
+            if (driverService.addDriver(newDriver)) {
+                System.out.println("внесено нового водія");
+                printOneDriver(id);
+            }
+        }catch (IndexOutOfBoundsException e){
+            System.out.println("не вірно внесено дані, внесіть правильно");
+            inputNewDriver();
         }
         System.out.println("""
                 1 внести ще одного водія
@@ -547,15 +572,19 @@ public class Console {
     }
 
     private void printOneDriver(int id) {
-        TableList tableListDrivers = new TableList("ID", "Name", "Surname", "Phone number", "Driver license");
-        tableListDrivers.addRow(
-                String.valueOf(driverService.getDriverById(id).getId()),
-                driverService.getDriverById(id).getName(),
-                driverService.getDriverById(id).getSurname(),
-                driverService.getDriverById(id).getPhoneNumber(),
-                driverService.getDriverById(id).getDriverQualificationEnum().getType());
-        tableListDrivers.print();
-        System.out.println();
+        if (driverRepo.isPresent(id)) {
+            TableList tableListDrivers = new TableList("ID", "Name", "Surname", "Phone number", "Driver license");
+            tableListDrivers.addRow(
+                    String.valueOf(driverService.getDriverById(id).getId()),
+                    driverService.getDriverById(id).getName(),
+                    driverService.getDriverById(id).getSurname(),
+                    driverService.getDriverById(id).getPhoneNumber(),
+                    driverService.getDriverById(id).getDriverQualificationEnum().getType());
+            tableListDrivers.print();
+            System.out.println();
+        } else {
+            System.out.println("Водій з ID " + id + "відсутній у базі");
+        }
     }
 
     private void printDriversOnChosenRoute() {
@@ -571,12 +600,23 @@ public class Console {
     }
 
     private void driverToTransport() {
-        System.out.println("Введіть ID водія і ID транспорту, використовуйте \"|\" в якості розділювача");
-        System.out.println("Driver ID | Transport ID");
-        String[] slitByBlock = readFromConsole().split("\\|");
-        int driverId = Integer.parseInt(slitByBlock[0].trim());
-        int transportId = Integer.parseInt(slitByBlock[1].trim());
-        driverService.assignDriverToTransport(driverId, transportId);
+        try {
+            System.out.println("Введіть ID водія і ID транспорту, використовуйте \"|\" в якості розділювача");
+            System.out.println("Driver ID | Transport ID");
+            String[] slitByBlock = readFromConsole().split("\\|");
+            int driverId = Integer.parseInt(slitByBlock[0].trim());
+            int transportId = Integer.parseInt(slitByBlock[1].trim());
+            Driver driver = driverService.getDriverById(driverId);
+            Transport transport = transportService.getTransportById(transportId);
+            if (driver == null || transport == null){
+                System.out.printf("Транспорт з ID %d не було закріплено за водієм з ID %d,\n водій або транспорт не існує\n", transportId, driverId);
+                return;
+            }
+            driverService.assignDriverToTransport(driver, transport);
+        }catch (NumberFormatException | IndexOutOfBoundsException e ){
+            System.out.println("не вірно внесено дані, внесіть правильно");
+            driverToTransport();
+        }
     }
 
     private void printDrivers(String title, List<Driver> driverList) {

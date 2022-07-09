@@ -39,6 +39,8 @@ public class RouteRepoImpl implements RouteRepo {
                 }
             }
         }
+        System.out.println("Маршрут з id "+ id + " відсутній у базі");
+
         return null; // TODO Тут краще спочатку перевірити, чи більше введений id ніж list.size(),
         // щоб не перебирати дарма. Також, повертати null не дуже, тоді краще його в Optional завернути додатково.
     }
