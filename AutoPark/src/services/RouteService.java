@@ -10,4 +10,6 @@ public interface RouteService {
     Route getRouteById(int id);
     List<Route> getAllRoutes();
     List<Route> getAllRoutesWithoutTransport();
+
+    boolean isPresent(int routeId);
 }

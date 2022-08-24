@@ -23,26 +23,33 @@ public class TransportServiceImpl implements TransportService {
 
     @Override
     public boolean addTransport(Transport transport) {
+        if (isPresent(transport.getId())) {
+            System.out.printf("Транспорт з id %d є у базі\n", transport.getId());
+            return false;
+        }
         return transportRepo.addTransport(transport);
     }
 
     @Override
     public boolean deleteTransport(int id) {
-        if (transportRepo.isPresent(id)){
+        if (isPresent(id)) {
             if (getTransportById(id).getDriver() == null) {
-                System.out.println("Транспорт "+ id + "успішно видалено");
+                System.out.println("Транспорт " + id + "успішно видалено");
                 return transportRepo.deleteTransport(id);
             }
             System.out.println("Транспорт не видалено. На даному транспорі є водій, \nперед видаленням зніміть водія з транспорту");
             return false;
         }
-        System.out.println("Транспорт з ID " + id + " відсутній у базі" );
+        System.out.println("Транспорт з ID " + id + " відсутній у базі");
         return false;
     }
 
     @Override
     public Transport getTransportById(int id) {
-        return transportRepo.getTransportById(id);
+        if (isPresent(id)) {
+            return transportRepo.getTransportById(id);
+        }
+        return null;
     }
 
     @Override
@@ -76,7 +83,7 @@ public class TransportServiceImpl implements TransportService {
 
     @Override
     public boolean transportToRoute(int transportId, int routeId) {
-        if (transportRepo.isPresent(transportId)&(routeRepo.isPresent(routeId))){
+        if (isPresent(transportId) & (routeRepo.getRouteById(routeId)!=null)) {
             Transport transport = getTransportById(transportId);
             if (transport.getDriver() != null) {
                 Route route = routeRepo.getRouteById(routeId);
@@ -96,5 +103,15 @@ public class TransportServiceImpl implements TransportService {
     public boolean removeTransportFromTheRoute(int id) {
         transportRepo.getTransportById(id).setRoute(null);
         return true;
+    }
+
+    @Override
+    public boolean isPresent(int transportId) {
+        for (Transport transport : transportRepo.getAllTransport()) {
+            if (transport.getId() == transportId) {
+                return true;
+            }
+        }
+        return false;
     }
 }

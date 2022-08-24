@@ -13,5 +13,7 @@ public interface TransportService {
     List<Transport> getListOfTransportWithoutDriver();
     boolean transportToRoute(int transportId, int routeId);
     boolean removeTransportFromTheRoute(int id);
+    boolean isPresent(int transportId);
+
 
 }

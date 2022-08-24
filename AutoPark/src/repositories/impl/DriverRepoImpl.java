@@ -15,15 +15,7 @@ public class DriverRepoImpl implements DriverRepo {
 
     @Override
     public boolean addDriver(Driver driver) {
-        if (!isPresent(driver.getId())){
-            return driverList.add(driver);
-        }
-        try {
-            throw new Exception("водій з ID " + driver.getId() + " є у базі");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
+        return driverList.add(driver);
     }
 
     @Override
@@ -33,29 +25,19 @@ public class DriverRepoImpl implements DriverRepo {
 
     @Override
     public Driver getDriverById(int id) {
-        if (isPresent(id)){
-            for (Driver driver : driverList) {
-                if (driver.getId() == id) {
-                    return driver;
-                }
+        for (Driver driver : driverList) {
+            if (driver.getId() == id) {
+                return driver;
             }
         }
-        System.out.println("Водій з id "+ id + " відсутній у базі");
         return null; //TODO Тут краще спочатку перевірити, чи більше введений id ніж list.size(),
-                    // щоб не перебирати дарма. Також, повертати null не дуже, тоді краще його в Optional завернути додатково.
+        // щоб не перебирати дарма. Також, повертати null не дуже, тоді краще його в Optional завернути додатково.
     }
 
     @Override
     public List<Driver> getAllDrivers() {
         return driverList;
     }
-    @Override
-    public boolean isPresent(int id) {
-        for (Driver driver : driverList) {
-            if (driver.getId() == id) {
-                return true;
-            }
-        }
-        return false;
-    }
+
+
 }

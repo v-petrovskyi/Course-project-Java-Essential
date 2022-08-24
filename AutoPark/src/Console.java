@@ -240,7 +240,7 @@ public class Console {
     }
 
     private void printOneRoute(int id) {
-        if (routeRepo.isPresent(id)) {
+        if (routeService.isPresent(id)) {
             TableList tableListRoutes = new TableList(3, "ID", "Start Place", "End Place");
             tableListRoutes.addRow(String.valueOf(routeService.getRouteById(id).getId()),
                     routeService.getRouteById(id).getStartPlace(),
@@ -480,7 +480,7 @@ public class Console {
     }
 
     private void printOneTransport(int id) {
-        if (transportRepo.isPresent(id)) {
+        if (transportService.isPresent(id)) {
             TableList tableListTransport = new TableList("ID", "Type", "Brand", "Passengers", "Driver ID", "Route ID");
             String driver;
             if (transportService.getTransportById(id).getDriver() == null) {
@@ -509,7 +509,7 @@ public class Console {
     }
 
     private void deletingTransport() {
-        System.out.println("Ведіть ID транспорту який ви хочете видалити");
+        System.out.println("Введіть ID транспорту який ви хочете видалити");
         try {
             int id = Integer.parseInt(readFromConsole());
             transportService.deleteTransport(id);
@@ -629,7 +629,7 @@ public class Console {
     }
 
     private void printOneDriver(int id) {
-        if (driverRepo.isPresent(id)) {
+        if (driverService.isPresent(id)) {
             TableList tableListDrivers = new TableList("ID", "Name", "Surname", "Phone number", "Driver license");
             tableListDrivers.addRow(
                     String.valueOf(driverService.getDriverById(id).getId()),
@@ -710,7 +710,7 @@ public class Console {
         System.out.println("Ведіть ID водія якого ви хочете видалити");
         try {
             int id = Integer.parseInt(readFromConsole());
-            if (!driverRepo.isPresent(id)) {
+            if (!driverService.isPresent(id)) {
                 System.out.println("Водій з даним ID відсутній у базі\n");
                 return;
             }
